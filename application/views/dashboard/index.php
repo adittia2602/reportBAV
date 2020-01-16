@@ -1,288 +1,380 @@
-          <div class="section-body">
-            <div class="penyaluranOverall row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-primary">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Debitur</h4>
-                            </div>
-                            <div class="card-body">
-                                <?= $overview['DEBITUR'] ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-danger">
-                            <i class="fas fa-random"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Penyaluran</h4>
-                            </div>
-                            <div class="card-body" data-toggle="tooltip" title="Rp. <?= $overview['PENYALURAN_DEBITUR']; ?>">
-                                <?= $pd = substr($overview['PENYALURAN_DEBITUR'],0,3)." T"; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="fas fa-undo"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Pengembalian Penyalur</h4>
-                            </div>
-                            <div class="card-body" data-toggle="tooltip" title="Rp. <?= $overview['PEMBAYARAN_POKOK_PENYALUR']; ?>">
-                                <?= $pp = substr($overview['PEMBAYARAN_POKOK_PENYALUR'],0,3)." M"; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-success">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Pencairan</h4>
-                            </div>
-                            <div class="card-body" data-toggle="tooltip" title="Rp. <?= $overview['PENCAIRAN_PIP']; ?>">
-                                <?= $pp = substr($overview['PENCAIRAN_PIP'],0,3)." T"; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+              
+              <div class="card-group">
+                  <div class="card border-right">
+                      <div class="card-body">
+                          <div class="d-flex d-lg-flex d-md-block align-items-center">
+                              <div>
+                                  <div class="d-inline-flex align-items-center">
+                                      <h2 class="text-dark mb-1 font-weight-medium">236</h2>
+                                  </div>
+                                  <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Debitur</h6>
+                              </div>
+                              <div class="ml-auto mt-md-3 mt-lg-0">
+                                  <span class="opacity-7 text-muted"><i data-feather="users"></i></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card border-right">
+                      <div class="card-body">
+                          <div class="d-flex d-lg-flex d-md-block align-items-center">
+                              <div>
+                                  <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
+                                          class="set-doller">Rp</sup>18 M</h2>
+                                  <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Penyaluran
+                                  </h6>
+                              </div>
+                              <div class="ml-auto mt-md-3 mt-lg-0">
+                                  <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card border-right">
+                      <div class="card-body">
+                          <div class="d-flex d-lg-flex d-md-block align-items-center">
+                              <div>
+                                  <div class="d-inline-flex align-items-center">
+                                      <h2 class="text-dark mb-1 font-weight-medium">39</h2>
+                                  </div>
+                                  <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Linkage</h6>
+                              </div>
+                              <div class="ml-auto mt-md-3 mt-lg-0">
+                                  <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="card border-right">
+                      <div class="card-body">
+                          <div class="d-flex d-lg-flex d-md-block align-items-center">
+                              <div>
+                                  <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
+                                          class="set-doller">Rp</sup>18 M</h2>
+                                  <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pembiayaan
+                                  </h6>
+                              </div>
+                              <div class="ml-auto mt-md-3 mt-lg-0">
+                                  <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-lg-4 col-md-12">
+                      <div class="card">
+                          <div class="card-body">
+                              <h4 class="card-title">Total Sales</h4>
+                              <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
+                              <ul class="list-style-none mb-0">
+                                  <li>
+                                      <i class="fas fa-circle text-primary font-10 mr-2"></i>
+                                      <span class="text-muted">Direct Sales</span>
+                                      <span class="text-dark float-right font-weight-medium">$2346</span>
+                                  </li>
+                                  <li class="mt-3">
+                                      <i class="fas fa-circle text-danger font-10 mr-2"></i>
+                                      <span class="text-muted">Referral Sales</span>
+                                      <span class="text-dark float-right font-weight-medium">$2108</span>
+                                  </li>
+                                  <li class="mt-3">
+                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
+                                      <span class="text-muted">Affiliate Sales</span>
+                                      <span class="text-dark float-right font-weight-medium">$1204</span>
+                                  </li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                      <div class="card">
+                          <div class="card-body">
+                              <h4 class="card-title">Net Income</h4>
+                              <div class="net-income mt-4 position-relative" style="height:294px;"></div>
+                              <ul class="list-inline text-center mt-5 mb-2">
+                                  <li class="list-inline-item text-muted font-italic">Sales for this month</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-md-12">
+                      <div class="card">
+                          <div class="card-body">
+                              <h4 class="card-title mb-4">Earning by Location</h4>
+                              <div class="" style="height:180px">
+                                  <div id="visitbylocate" style="height:100%"></div>
+                              </div>
+                              <div class="row mb-3 align-items-center mt-1 mt-5">
+                                  <div class="col-4 text-right">
+                                      <span class="text-muted font-14">India</span>
+                                  </div>
+                                  <div class="col-5">
+                                      <div class="progress" style="height: 5px;">
+                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
+                                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                  </div>
+                                  <div class="col-3 text-right">
+                                      <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
+                                  </div>
+                              </div>
+                              <div class="row mb-3 align-items-center">
+                                  <div class="col-4 text-right">
+                                      <span class="text-muted font-14">UK</span>
+                                  </div>
+                                  <div class="col-5">
+                                      <div class="progress" style="height: 5px;">
+                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
+                                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                  </div>
+                                  <div class="col-3 text-right">
+                                      <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
+                                  </div>
+                              </div>
+                              <div class="row mb-3 align-items-center">
+                                  <div class="col-4 text-right">
+                                      <span class="text-muted font-14">USA</span>
+                                  </div>
+                                  <div class="col-5">
+                                      <div class="progress" style="height: 5px;">
+                                          <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
+                                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                  </div>
+                                  <div class="col-3 text-right">
+                                      <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
+                                  </div>
+                              </div>
+                              <div class="row align-items-center">
+                                  <div class="col-4 text-right">
+                                      <span class="text-muted font-14">China</span>
+                                  </div>
+                                  <div class="col-5">
+                                      <div class="progress" style="height: 5px;">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
+                                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
+                                  </div>
+                                  <div class="col-3 text-right">
+                                      <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-body">
+                              <div class="d-flex align-items-center mb-4">
+                                  <h4 class="card-title">Top Leaders</h4>
+                                  <div class="ml-auto">
+                                      <div class="dropdown sub-dropdown">
+                                          <button class="btn btn-link text-muted dropdown-toggle" type="button"
+                                              id="dd1" data-toggle="dropdown" aria-haspopup="true"
+                                              aria-expanded="false">
+                                              <i data-feather="more-vertical"></i>
+                                          </button>
+                                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
+                                              <a class="dropdown-item" href="#">Insert</a>
+                                              <a class="dropdown-item" href="#">Update</a>
+                                              <a class="dropdown-item" href="#">Delete</a>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="table-responsive">
+                                  <table class="table no-wrap v-middle mb-0">
+                                      <thead>
+                                          <tr class="border-0">
+                                              <th class="border-0 font-14 font-weight-medium text-muted">Team Lead
+                                              </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted px-2">Project
+                                              </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted">Team</th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                                                  Status
+                                              </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">
+                                                  Weeks
+                                              </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted">Budget</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                              <td class="border-top-0 px-2 py-4">
+                                                  <div class="d-flex no-block align-items-center">
+                                                      <div class="mr-3"><img
+                                                              src="../assets/images/users/widget-table-pic1.jpg"
+                                                              alt="user" class="rounded-circle" width="45"
+                                                              height="45" /></div>
+                                                      <div class="">
+                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">Hanna
+                                                              Gover</h5>
+                                                          <span class="text-muted font-14">hgover@gmail.com</span>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Elite Admin</td>
+                                              <td class="border-top-0 px-2 py-4">
+                                                  <div class="popover-icon">
+                                                      <a class="btn btn-primary rounded-circle btn-circle font-12"
+                                                          href="javascript:void(0)">DS</a>
+                                                      <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
+                                                          href="javascript:void(0)">SS</a>
+                                                      <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
+                                                          href="javascript:void(0)">RP</a>
+                                                      <a class="btn btn-success text-white rounded-circle btn-circle font-20"
+                                                          href="javascript:void(0)">+</a>
+                                                  </div>
+                                              </td>
+                                              <td class="border-top-0 text-center px-2 py-4"><i
+                                                      class="fa fa-circle text-primary font-12" data-toggle="tooltip"
+                                                      data-placement="top" title="In Testing"></i></td>
+                                              <td
+                                                  class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
+                                                  35
+                                              </td>
+                                              <td class="font-weight-medium text-dark border-top-0 px-2 py-4">$96K
+                                              </td>
+                                          </tr>
+                                          <tr>
+                                              <td class="px-2 py-4">
+                                                  <div class="d-flex no-block align-items-center">
+                                                      <div class="mr-3"><img
+                                                              src="../assets/images/users/widget-table-pic2.jpg"
+                                                              alt="user" class="rounded-circle" width="45"
+                                                              height="45" /></div>
+                                                      <div class="">
+                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">Daniel
+                                                              Kristeen
+                                                          </h5>
+                                                          <span class="text-muted font-14">Kristeen@gmail.com</span>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="text-muted px-2 py-4 font-14">Real Homes WP Theme</td>
+                                              <td class="px-2 py-4">
+                                                  <div class="popover-icon">
+                                                      <a class="btn btn-primary rounded-circle btn-circle font-12"
+                                                          href="javascript:void(0)">DS</a>
+                                                      <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
+                                                          href="javascript:void(0)">SS</a>
+                                                      <a class="btn btn-success text-white rounded-circle btn-circle font-20"
+                                                          href="javascript:void(0)">+</a>
+                                                  </div>
+                                              </td>
+                                              <td class="text-center px-2 py-4"><i
+                                                      class="fa fa-circle text-success font-12" data-toggle="tooltip"
+                                                      data-placement="top" title="Done"></i>
+                                              </td>
+                                              <td class="text-center text-muted font-weight-medium px-2 py-4">32</td>
+                                              <td class="font-weight-medium text-dark px-2 py-4">$85K</td>
+                                          </tr>
+                                          <tr>
+                                              <td class="px-2 py-4">
+                                                  <div class="d-flex no-block align-items-center">
+                                                      <div class="mr-3"><img
+                                                              src="../assets/images/users/widget-table-pic3.jpg"
+                                                              alt="user" class="rounded-circle" width="45"
+                                                              height="45" /></div>
+                                                      <div class="">
+                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">Julian
+                                                              Josephs
+                                                          </h5>
+                                                          <span class="text-muted font-14">Josephs@gmail.com</span>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="text-muted px-2 py-4 font-14">MedicalPro WP Theme</td>
+                                              <td class="px-2 py-4">
+                                                  <div class="popover-icon">
+                                                      <a class="btn btn-primary rounded-circle btn-circle font-12"
+                                                          href="javascript:void(0)">DS</a>
+                                                      <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
+                                                          href="javascript:void(0)">SS</a>
+                                                      <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
+                                                          href="javascript:void(0)">RP</a>
+                                                      <a class="btn btn-success text-white rounded-circle btn-circle font-20"
+                                                          href="javascript:void(0)">+</a>
+                                                  </div>
+                                              </td>
+                                              <td class="text-center px-2 py-4"><i
+                                                      class="fa fa-circle text-primary font-12" data-toggle="tooltip"
+                                                      data-placement="top" title="Done"></i>
+                                              </td>
+                                              <td class="text-center text-muted font-weight-medium px-2 py-4">29</td>
+                                              <td class="font-weight-medium text-dark px-2 py-4">$81K</td>
+                                          </tr>
+                                          <tr>
+                                              <td class="px-2 py-4">
+                                                  <div class="d-flex no-block align-items-center">
+                                                      <div class="mr-3"><img
+                                                              src="../assets/images/users/widget-table-pic4.jpg"
+                                                              alt="user" class="rounded-circle" width="45"
+                                                              height="45" /></div>
+                                                      <div class="">
+                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">Jan
+                                                              Petrovic
+                                                          </h5>
+                                                          <span class="text-muted font-14">hgover@gmail.com</span>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                              <td class="text-muted px-2 py-4 font-14">Hosting Press HTML</td>
+                                              <td class="px-2 py-4">
+                                                  <div class="popover-icon">
+                                                      <a class="btn btn-primary rounded-circle btn-circle font-12"
+                                                          href="javascript:void(0)">DS</a>
+                                                      <a class="btn btn-success text-white font-20 rounded-circle btn-circle"
+                                                          href="javascript:void(0)">+</a>
+                                                  </div>
+                                              </td>
+                                              <td class="text-center px-2 py-4"><i
+                                                      class="fa fa-circle text-danger font-12" data-toggle="tooltip"
+                                                      data-placement="top" title="In Progress"></i></td>
+                                              <td class="text-center text-muted font-weight-medium px-2 py-4">23</td>
+                                              <td class="font-weight-medium text-dark px-2 py-4">$80K</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
             </div>
-
-            <div class="petaPenyaluran row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Peta Penyebaran Penyaluran UMi </h4>
-                  </div>
-                  <div class="card-body">
-                    <div id="visitorMap3"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="chartPenyaluran row">
-              <div class="col-12 col-md-3 col-lg-3">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Penyaluran UMi by Gender</h4>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="jeniskelamin"></canvas>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-md-4 col-lg-4">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Penyaluran UMi by Usia</h4>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="usia"></canvas>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-md-5 col-lg-5">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Penyaluran UMi by Nominal Pembiayaan</h4>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="nominal"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="penyaluranPerPenyalur row">
-              <div class="col-12 col-md-12 col-sm-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Summary Penyaluran (by Penyalur)</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-striped" id="dataTable">
-                        <thead>
-                          <tr class="text-center">
-                            <th>
-                              #
-                            </th>
-                            <th>PENYALUR</th>
-                            <th>TOTAL DEBITUR</th>
-                            <th>TOTAL PENYALURAN</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        <?php $i=1; foreach ($umiallpartner as $a) : ?>
-                          <tr>
-                            <td>
-                              <?= $i ?>
-                            </td>
-                            <td><?= $a['PENYALUR']; ?></td>
-                            <td class="text-right"><?= number_format($a['JMLDEBITUR'],0, '', '.'); ?></td>
-                            <td class="text-right"><?= number_format($a['TOTALPENYALURAN'],0, '', '.'); ?></td>
-                          </tr>
-                        <?php $i++; endforeach;?>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <footer class="main-footer">
-        <div class="footer-left">
-          Copyright &copy; 2019 <div class="bullet"></div> TIM SIT - PIP
-        </div>
-        <div class="footer-right">
-          2.3.0
-        </div>
-      </footer>
-    </div>
-  </div>
-
-  <!-- General JS Scripts -->
-  <script src="<?php echo base_url('assets-report/'); ?>js/jquery.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/popper.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/nicescroll/jquery.nicescroll.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/moment.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/stisla.js"></script>
-
-  <!-- JS Libraies -->
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/datatables.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/JSZip-2.5.0/jszip.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/Buttons-1.5.6/js/buttons.print.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/Buttons-1.5.6/js/buttons.flash.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/datatables/datatables.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/page/modules-datatables.js"></script>
-
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/jqvmap/jquery.vmap.min.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/jqvmap/jquery.vmap.indonesia.js"></script>
-
-  <script src="<?php echo base_url('assets-report/'); ?>vendor/chart.min.js"></script>
-
-  <!-- Template JS File -->
-  <script src="<?php echo base_url('assets-report/'); ?>js/scripts.js"></script>
-  <script src="<?php echo base_url('assets-report/'); ?>js/custom.js"></script>
-
-  <!-- Page Specific JS File -->
-  <script>
-    var umiGender = JSON.parse('<?php echo $umi_gender; ?>');
-    var umiAge      = JSON.parse('<?php echo $umi_age; ?>');
-    var umiNominal  = JSON.parse('<?php echo $umi_nominal; ?>');
-    var opt = { responsive: true, legend: {position: 'bottom' }, 
-                tooltips: {
-                    callbacks: {
-                      label: function(tooltipItem, data) {
-                        var value = data.datasets[0].data[tooltipItem.index];
-                        value = value.toString();
-                        value = value.split(/(?=(?:...)*$)/);
-                        value = value.join('.');
-                        return value + " Debitur";
-                      }
-                    } // end callbacks:
-                  }, //end tooltips
-    };
-
-    var ctx = document.getElementById("jeniskelamin").getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        datasets: umiGender.datasets,
-        labels: umiGender.labels,
-      },
-      options: opt,
-    });
-
-    var ctx = document.getElementById("usia").getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        datasets: umiAge.datasets,
-        labels: umiAge.labels,
-      },
-      options: opt,
-    });
-
-    var ctx = document.getElementById("nominal").getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        datasets: umiNominal.datasets,
-        labels: umiNominal.labels,
-      },
-      options: opt,
-    });
-
-    
-  </script>
-
-  <script type="text/javascript">
-    var dataPenyaluran = JSON.parse('<?php echo $petapenyaluran; ?>');
-
-    jQuery(document).ready(function() {
-        jQuery('#visitorMap3').vectorMap({  
-            map: 'indonesia_id',
-            backgroundColor: '#ffffff',
-            borderColor: '#f2f2f2',
-            borderOpacity: .8,
-            borderWidth: 1,
-            hoverColor  : '#000',
-            hoverOpacity: .8,
-            color: '#ddd',
-            selectedRegions: false,
-            showTooltip: true,
             
-            series: {
-              regions: [{values: dataPenyaluran,}]
-            },
-            onLabelShow: function(event, label, code){
-                var data =  label[0].innerHTML.toUpperCase()
-                            + ' <b>  <br/> Total Debitur : '
-                            + dataPenyaluran[code]['DEBITUR']
-                            + ' </b> <br/> <b> Total Penyaluran : '
-                            + dataPenyaluran[code]['PENYALURAN']
-                            + '</b>'; 
-                label.html(data);
-            },
-            onRegionClick: function(element, code, region)
-            {
-                var message = region.toUpperCase()
-                            + ' | Total Debitur : '
-                            + dataPenyaluran[code]['DEBITUR']
-                            + ' | Total Penyaluran : '
-                            + dataPenyaluran[code]['PENYALURAN']
-                            + ''; 
-        
-                alert(message);
-            }
-        });
-    });
-  </script>
-</body>
-</html>
+            <!-- footer -->
+            <footer class="footer text-center text-muted">
+                All Rights Reserved by BAV.
+            </footer>
+        </div>
+    </div>
 
+    <!-- All Jquery -->
+    <script src="<?php echo base_url('assets/'); ?>libs/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <script src="<?php echo base_url('assets/'); ?>js/app-style-switcher.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>js/feather.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="<?php echo base_url('assets/'); ?>js/custom.min.js"></script>
+
+    <!-- Page Specific JS File -->
+    
+</body>
+
+</html>

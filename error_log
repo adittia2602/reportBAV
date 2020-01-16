@@ -1,0 +1,11 @@
+[16-Jan-2020 06:33:23 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:33:25 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:33:32 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:33:38 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:34:02 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:34:18 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 17
+[16-Jan-2020 06:34:43 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:34:45 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:34:45 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:35:31 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15
+[16-Jan-2020 06:35:36 UTC] PHP Fatal error:  Call to a member function getBreadcrumb() on null in /home/rianinda/public_html/application/controllers/Dashboard.php on line 15

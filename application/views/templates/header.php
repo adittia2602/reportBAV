@@ -13,7 +13,8 @@
     <!-- Custom CSS -->
     <link href="<?php echo base_url('assets/'); ?>extra-libs/c3/c3.min.css" rel="stylesheet">
     <link href="<?php echo base_url('assets/'); ?>libs/chartist/dist/chartist.min.css" rel="stylesheet">
-    <link href="<?php echo base_url('assets/'); ?>extra-libs/jvector/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/'); ?>extra-libs/datatables/datatables.min.css">
     <!-- Custom CSS -->
     <link href="<?php echo base_url('assets/'); ?>css/style.min.css" rel="stylesheet">
 </head>

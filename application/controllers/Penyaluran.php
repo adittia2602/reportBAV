@@ -11,9 +11,37 @@ class Penyaluran extends CI_Controller
         $this->load->model('WS_mods', 'ws');
     }
 
+    public function overview() 
+    {
+        $data['title'] = 'Overview';
+        $data['subtitle'] = 'Report Penyaluran dan OSL UMi';
+        $data['bc'] = $this->modul->getBreadcrumb($data['title']);
+        $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
+        
+        $cod = $this->input->post('cod');   
+        
+        if ( isset($cod) ){
+            $data['umi'] = $this->ws->fetchData('GET','bav/penyaluran/'.$cod,'');
+            $data['cod'] = $cod;
+        } 
+        else {
+            $data['umi'] = $this->ws->fetchData('GET','bav/penyaluran/','');
+            $data['cod'] = date("Y-m-d"); 
+        }
+        ini_set('max_execution_time', 300);
+
+        $this->load->view('templates/header', $data); // untuk memanggil template header
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('penyaluran/overview', $data);
+        $this->load->view('templates/footer', $data);
+    }
+    
     public function penyalur()
     {
-        $data['penyalur'] = $this->ws->fetchData('GET','penyalur','');
+        $data['penyalur'] = $this->ws->fetchData('GET','bav/listlinkage','');
+        print_r ($data['penyalur']);
+        die;
 
         $this->form_validation->set_rules('penyalur', 'Penyalur', 'required');
 
@@ -67,31 +95,6 @@ class Penyaluran extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function wilayah() 
-    {
-        $data['title'] = 'Wilayah';
-        $data['bc'] = $this->modul->getBreadcrumb($data['title']);
-        $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
-        
-        $cod = $this->input->post('cod');   
-        
-        if ( isset($cod) ){
-            $data['umi'] = $this->ws->fetchData('GET','report/penyaluran/overall/'.$cod,'');
-            $data['cod'] = $cod;
-        } 
-        else {
-            $data['umi'] = $this->ws->fetchData('GET','report/penyaluran/overall','');
-            $data['cod'] = date("Y-m-d"); 
-        }
-        ini_set('max_execution_time', 300);
-
-        $this->load->view('templates/header', $data); // untuk memanggil template header
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('penyaluran/wilayah', $data);
-        $this->load->view('templates/footer', $data);
-    }
-
     public function bulanan()
     {
         $data['title'] = 'Bulanan';
@@ -108,21 +111,4 @@ class Penyaluran extends CI_Controller
         $this->load->view('templates/footer', $data);
     }
 
-    public function aktif() 
-    {
-        $data['title'] = 'Penyaluran Aktif';
-        $data['bc'] = $this->modul->getBreadcrumb($data['title']);
-        $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
-        
-        $data['umi'] = $this->ws->fetchData('GET','report/penyaluran/active','');
-        $datetime = new DateTime('yesterday');
-        $data['cod'] = $datetime->format('Y-m-d');       
-        ini_set('max_execution_time', 300);
-
-        $this->load->view('templates/header', $data); // untuk memanggil template header
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('penyaluran/penyaluranaktif', $data);
-        $this->load->view('templates/footer', $data);
-    }
 }

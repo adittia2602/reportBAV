@@ -21,11 +21,10 @@
                                             <th>PENYALUR</th>
                                             <th>FASILITAS KE-</th>
                                             <th>NILAI PENCAIRAN</th>
-                                            <th>TGL BAYAR</th>
+                                            <th>TGL JATUH TAMPO</th>
                                             <th>ANGSURAN POKOK</th>
                                             <th>ANGSURAN BUNGA</th>
                                             <th>TOTAL ANGSURAN</th>
-                                            <th>OUTSTANDING</th>
                                         </tr>
                                     </thead>
                                     <tbody>

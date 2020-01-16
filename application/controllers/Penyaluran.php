@@ -40,8 +40,6 @@ class Penyaluran extends CI_Controller
     public function penyalur()
     {
         $data['penyalur'] = $this->ws->fetchData('GET','bav/listlinkage','');
-        print_r ($data['penyalur']);
-        die;
 
         $this->form_validation->set_rules('penyalur', 'Penyalur', 'required');
 

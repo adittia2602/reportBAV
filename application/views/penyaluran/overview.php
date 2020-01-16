@@ -13,21 +13,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4>Summary per Wilayah</h4>
-                            <div class="">
-                                <form class = "form-horizontal col-md-6  offset-md-6" action="<?= base_url('penyaluran/wilayah'); ?>" method="post" enctype="multipart/form-data">
-                                    <div class="form-group row">
-                                        <label for="cod" class="col-sm-12 col-md-2 offset-md-3 col-form-label">Cut Off Date : </label>
-                                        <div class="col-md-5 col-sm-12">
-                                            <input type="date" class="form-control" id="cod" name="cod" value="<?= $cod; ?>">
-                                        </div>
-                                        <div class="col-md-2 col-sm-12">
-                                            <button type="submit" class="btn btn-primary btn-md">Submit</button>
-                                        </div>
-                                    </div>
-                                    
-                                </form>
-                            </div>
+                            <h4><?= $subtitle; ?></h4>
+                            
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable">   
                                     <thead>                                 
@@ -35,11 +22,11 @@
                                             <th>
                                             #
                                             </th>
-                                            <th>PROPINSI</th>
-                                            <th>KABKOTA</th>
                                             <th>PENYALUR</th>
                                             <th>TOTAL DEBITUR</th>
                                             <th>TOTAL PENYALURAN</th>
+                                            <th>OSL PEMBIAYAAN</th>
+                                            <th>OSL PENYALURAN</th>
                                         </tr>
                                     </thead>
                                     <tbody>

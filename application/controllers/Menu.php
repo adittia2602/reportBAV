@@ -8,7 +8,6 @@ class Menu extends CI_Controller
         parent::__construct();
         is_logged_in();
         $this->load->model('Basic_mods', 'modul');
-
     }
     public function index()
     {
@@ -33,7 +32,8 @@ class Menu extends CI_Controller
                 'urutan' => $this->input->post('urutan'),
             ];
             $this->modul->insertData('menu', $data);
-                $this->session->set_flashdata('message',
+            $this->session->set_flashdata(
+                'message',
                 '<div class="alert alert-success alert-dismissible show fade">
                     <div class="alert-body">
                         <button class="close" data-dismiss="alert">
@@ -41,20 +41,66 @@ class Menu extends CI_Controller
                         </button>
                        New menu added!
                     </div>
-                </div>');
+                </div>'
+            );
             redirect('menu');
         }
     }
 
-    public function updatemenu($id){
-        if (!empty($this->input->post('group'))){
-            $this->db->set('group',$this->input->post('group'));
+    public function excel()
+    {
+        $data['menu'] = $this->db->get('user_menu')->result_array();
+
+        require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
+        require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
+
+        $object = new PHPExcel();
+
+        $object->getProperties()->setCreator("Framework Indonesia");
+        $object->getProperties()->setLastModifiedby("Framework Indonesia");
+        $object->getProperties()->setTitle("User Data");
+
+        $object->setActiveSheetIndex(0);
+
+        $object->getActiveSheet()->setCellValue('A1', 'No');
+        $object->getActiveSheet()->setCellValue('B1', 'Group Menu');
+        $object->getActiveSheet()->setCellValue('C1', 'Menu');
+        $object->getActiveSheet()->setCellValue('D1', 'Urutan');
+
+        $baris = 2;
+        $no = 1;
+
+        foreach ($data['menu'] as $m) {
+            $object->getActiveSheet()->setCellValue('A' . $baris, $no++);
+            $object->getActiveSheet()->setCellValue('B' . $baris, $m['group']);
+            $object->getActiveSheet()->setCellValue('C' . $baris, $m['menu']);
+            $object->getActiveSheet()->setCellValue('D' . $baris, $m['urutan']);
+
+            $baris++;
         }
-        if (!empty($this->input->post('menu'))){
-            $this->db->set('menu',$this->input->post('menu'));
+        $filename = "Data Userdata" . '.xlsx';
+
+        $object->getActiveSheet()->setTitle("Data User");
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function updatemenu($id)
+    {
+        if (!empty($this->input->post('group'))) {
+            $this->db->set('group', $this->input->post('group'));
         }
-        if (!empty($this->input->post('urutan'))){
-            $this->db->set('urutan',$this->input->post('urutan'));
+        if (!empty($this->input->post('menu'))) {
+            $this->db->set('menu', $this->input->post('menu'));
+        }
+        if (!empty($this->input->post('urutan'))) {
+            $this->db->set('urutan', $this->input->post('urutan'));
         }
 
         $this->db->where('id', $id);
@@ -68,7 +114,8 @@ class Menu extends CI_Controller
         redirect('menu');
     }
 
-    public function submenu() {
+    public function submenu()
+    {
         $data['title'] = 'Submenu';
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
@@ -106,69 +153,79 @@ class Menu extends CI_Controller
         }
     }
 
-    public function updatesubmenu($id){
-        if (!empty($this->input->post('title'))){
-            $this->db->set('title',$this->input->post('title'));
+    public function updatesubmenu($id)
+    {
+        if (!empty($this->input->post('title'))) {
+            $this->db->set('title', $this->input->post('title'));
         }
-        if (!empty($this->input->post('menu_id'))){
-            $this->db->set('menu_id',$this->input->post('menu_id'));
+        if (!empty($this->input->post('menu_id'))) {
+            $this->db->set('menu_id', $this->input->post('menu_id'));
         }
-        if (!empty($this->input->post('url'))){
-            $this->db->set('url',$this->input->post('url'));
+        if (!empty($this->input->post('url'))) {
+            $this->db->set('url', $this->input->post('url'));
         }
-        if (!empty($this->input->post('icon'))){
-            $this->db->set('icon',$this->input->post('icon'));
+        if (!empty($this->input->post('icon'))) {
+            $this->db->set('icon', $this->input->post('icon'));
         }
         $active = empty($this->input->post('is_active')) ? '0' : $this->input->post('is_active');
-        $this->db->set('is_active',$active);
+        $this->db->set('is_active', $active);
 
         $this->db->where('id', $id);
         if ($this->db->update('user_sub_menu')) {
-            $this->session->set_flashdata('message',
-            '<div class="alert alert-success alert-dismissible show fade">
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success alert-dismissible show fade">
                 <div class="alert-body">
                     <button class="close" data-dismiss="alert">
                         <span>&times;</span>
                     </button>
                     Edit submenu berhasil.
                 </div>
-            </div>');
+            </div>'
+            );
         } else {
-            $this->session->set_flashdata('message',
-            '<div class="alert alert-danger alert-dismissible show fade">
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-danger alert-dismissible show fade">
                 <div class="alert-body">
                     <button class="close" data-dismiss="alert">
                         <span>&times;</span>
                     </button>
                     <?= $this->db->error_message(); ?>
                 </div>
-            </div>');
+            </div>'
+            );
         }
         redirect('menu/submenu');
     }
 
-    public function deletesubmenu($id){
-        if ($this->modul->deleteData('submenu',$id)) {
-            $this->session->set_flashdata('message',
-            '<div class="alert alert-success alert-dismissible show fade">
+    public function deletesubmenu($id)
+    {
+        if ($this->modul->deleteData('submenu', $id)) {
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success alert-dismissible show fade">
                 <div class="alert-body">
                     <button class="close" data-dismiss="alert">
                         <span>&times;</span>
                     </button>
                     Hapus Data berhasil!
                 </div>
-            </div>');
+            </div>'
+            );
         } else {
-            $this->session->set_flashdata('message',
-            '<div class="alert alert-success alert-dismissible show fade">
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success alert-dismissible show fade">
                 <div class="alert-body">
                     <button class="close" data-dismiss="alert">
                         <span>&times;</span>
                     </button>
                     <?= $this->db->error_message(); ?>
                 </div>
-            </div>');
-            }
+            </div>'
+            );
+        }
         redirect('menu/submenu');
     }
 }

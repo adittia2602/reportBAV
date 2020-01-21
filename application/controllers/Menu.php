@@ -51,8 +51,8 @@ class Menu extends CI_Controller
     {
         $data['menu'] = $this->db->get('user_menu')->result_array();
 
-        require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
-        require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
+        require(FCPATH . 'assets/extra-libs/PHPExcel-1.8/Classes/PHPExcel.php');
+        require(FCPATH . 'assets/extra-libs/PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
 
         $object = new PHPExcel();
 

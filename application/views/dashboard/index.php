@@ -7,7 +7,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <div class="d-inline-flex align-items-center">
-                                      <h2 class="text-dark mb-1 font-weight-medium">236</h2>
+                                      <h2 class="text-dark mb-1 font-weight-medium"><?= number_format($overview->totaldebitur,0, '', '.'); ?></h2>
                                   </div>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Debitur</h6>
                               </div>
@@ -22,7 +22,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp</sup>18 M</h2>
+                                          class="set-doller">Rp</sup> <?= number_format($overview->totalpenyaluran,0, '', '.'); ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Penyaluran
                                   </h6>
                               </div>
@@ -37,7 +37,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <div class="d-inline-flex align-items-center">
-                                      <h2 class="text-dark mb-1 font-weight-medium">39</h2>
+                                      <h2 class="text-dark mb-1 font-weight-medium"><?= $overview->totalpenyalur;?></h2>
                                   </div>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Linkage</h6>
                               </div>
@@ -52,7 +52,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp</sup>18 M</h2>
+                                          class="set-doller">Rp </sup> <?= number_format($overview->totalpembiayaan,0, '', '.'); ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pembiayaan
                                   </h6>
                               </div>

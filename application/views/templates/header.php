@@ -12,7 +12,6 @@
     <title>SIKPUMi - BAV</title>
     <!-- Custom CSS -->
     <link href="<?php echo base_url('assets/'); ?>extra-libs/c3/c3.min.css" rel="stylesheet">
-    <link href="<?php echo base_url('assets/'); ?>libs/chartist/dist/chartist.min.css" rel="stylesheet">
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="<?php echo base_url('assets/'); ?>extra-libs/datatables/datatables.min.css">
     <!-- Custom CSS -->

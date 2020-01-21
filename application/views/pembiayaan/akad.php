@@ -25,19 +25,17 @@
                                             <th>BATCH</th>
                                             <th>TGL PENCAIRAN</th>
                                             <th>NILAI PENCAIRAN</th>
-                                            <th>NILAI ANGSURAN</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($akad as $a) : ?>
                                             <tr>
-                                                <td><?= $a['PENYALUR']; ?></td>
-                                                <td><?= $a['TGLAKAD']; ?></td>
-                                                <td class="text-right"><?=  number_format($a['NILAIAKAD'],0, '', '.'); ?></td>
-                                                <td class="text-center"><?= $a['BATCH']; ?></td>
-                                                <td><?= $a['TGLPENCAIRAN']; ?></td>
-                                                <td class="text-right"><?= number_format($a['NILAIPENCAIRAN'],0, '', '.'); ?></td>
-                                                <td class="text-right"><?= number_format($a['ANGSURAN'],0, '', '.'); ?></td>
+                                                <td><?= $a['penyalur']; ?></td>
+                                                <td><?= $a['tglakad']; ?></td>
+                                                <td class="text-right"><?=  number_format($a['nilaiakad'],0, '', '.'); ?></td>
+                                                <td class="text-center"><?= $a['batchpencairan']; ?></td>
+                                                <td><?= $a['tglpencairan']; ?></td>
+                                                <td class="text-right"><?= number_format($a['nilaipencairan'],0, '', '.'); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>

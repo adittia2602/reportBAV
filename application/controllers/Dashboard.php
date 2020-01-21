@@ -9,6 +9,7 @@ class Dashboard extends CI_Controller
         is_logged_in();
         $this->load->model('Basic_mods', 'modul');
         $this->load->model('WS_mods', 'ws');
+        $this->load->model('Umi_mods', 'umi');
     }
     public function index()
     {
@@ -18,7 +19,7 @@ class Dashboard extends CI_Controller
         ini_set('max_execution_time', 300);
 
         // TABLE
-        $data['overview'] = $this->ws->fetchData('GET','bav/overview','');
+        $data['overview'] = $this->umi->overview();
 
         // LOAD VIEW
         $this->load->view('templates/header', $data); // untuk memanggil template header

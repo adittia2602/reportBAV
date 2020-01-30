@@ -131,48 +131,34 @@ class Umi_mods extends CI_Model
                     GROUP BY 1 
                     ORDER BY kodepenyalur ";
         $contract = $this->db->query($query)->result_array();
-        
-
-        $query = " SELECT kodepenyalur, SUM(nilaiakad) AS totalpenyaluran, SUM(outstanding) AS ospenyaluran FROM umi_noa GROUP BY 1 ";
-        $disbursement = $this->db->query($query)->result_array();
-        foreach ( $disbursement as $tp ){  
-            $penyaluran[] = (object) array(
+        foreach ( $contract as $tp ){  
+            $pembiayaan[] = (object) array(
                 'kodepenyalur'      => $tp['kodepenyalur'],
-                'totalpenyaluran'   => $tp['totalpenyaluran'],
-                'ospenyaluran'      => $tp['ospenyaluran'] 
+                'penyalur'          => $tp['penyalur'],
+                'totalpencairan'      => $tp['totalpencairan'] 
             );
         }
+
+        $query = " SELECT kodepenyalur, count(nik) AS totaldebitur, SUM(nilaiakad) AS totalpenyaluran, SUM(outstanding) AS ospenyaluran FROM umi_noa GROUP BY 1 ";
+        $penyaluran = $this->db->query($query)->result_array();
+        
     
-        foreach ($contract as $pembiayaan){
-            $data[] = (object) array(
-                'totalpencairan'  => number_format($pembiayaan['totalpencairan'],0, '', '.'),
-                'totalpenyaluran' => number_format($p,0, '', '.')
-            );
-            foreach ($penyaluran as $py){
-                
+        foreach ($penyaluran as $py) {
+            foreach ($pembiayaan as $pb) {
+                if ( $py['kodepenyalur'] == $pb->kodepenyalur ){
+                    $data[] = (object) array(
+                        'penyalur' =>$pb->penyalur,
+                        'totaldebitur' => number_format($py['totaldebitur'],0, '', '.'),
+                        'totalpenyaluran'  => number_format($py['totalpenyaluran'],0, '', '.'),
+                        'totalpembiayaan' => number_format($pb->totalpencairan,0, '', '.'), 
+                        'ospenyaluran' => number_format($py['ospenyaluran'],0, '', '.'),
+                        'ospembiayaan' => number_format($pb->totalpencairan,0, '', '.')
+                    );
+                }
             }
-            
         }
      
         return $data;
-
-        $query = "SELECT count(noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran FROM umi_noa";
-        $penyaluran = $this->db->query($query)->row_array();
-
-        $query1 = "SELECT count(*) as totalpenyalur FROM umi_penyalur";
-        $linkage = $this->db->query($query1)->row_array();
-
-        $query2 = "SELECT sum(nilaipencairan) as totalpencairan FROM umi_akad";
-        $pembiayaan = $this->db->query($query2)->row_array();
-
-        $overview = new StdClass();
-        $overview->totaldebitur = $penyaluran['totaldebitur'];
-        $overview->totalpenyaluran = $penyaluran['totalpenyaluran'];
-        $overview->totalpenyalur = $linkage['totalpenyalur'];
-        $overview->totalpembiayaan = $pembiayaan['totalpencairan'];
-
-
-        return $overview;
     }
     
 }

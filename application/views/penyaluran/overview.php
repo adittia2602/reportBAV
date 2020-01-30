@@ -25,6 +25,7 @@
                                             <th>PENYALUR</th>
                                             <th>TOTAL DEBITUR</th>
                                             <th>TOTAL PENYALURAN</th>
+                                            <th>TOTAL PEMBIAYAAN</th>
                                             <th>OSL PEMBIAYAAN</th>
                                             <th>OSL PENYALURAN</th>
                                         </tr>
@@ -35,11 +36,12 @@
                                             <td class="text-center">
                                             <?= $i ?>
                                             </td>
-                                            <td><?= $a['PROPINSI']; ?></td>
-                                            <td><?= $a['KABKOTA']; ?></td>
-                                            <td><?= $a['LINKAGE']; ?></td>
-                                            <td class="text-right"><?=  number_format($a['JUMDEBITUR'],0, '', '.'); ?></td>
-                                            <td class="text-right"><?= number_format($a['TOTAPENYALURAN'],0, '', '.'); ?></td>
+                                            <td><?= $a->penyalur; ?></td>
+                                            <td><?= $a->totaldebitur; ?></td>
+                                            <td><?= $a->totalpenyaluran; ?></td>
+                                            <td><?= $a->totalpembiayaan; ?></td>
+                                            <td><?=  $a->ospenyaluran; ?></td>
+                                            <td><?=  $a->ospembiayaan; ?></td>
                                         </tr>
                                         <?php $i++; endforeach;?>
                                     </tbody>

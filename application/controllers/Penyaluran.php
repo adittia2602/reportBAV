@@ -20,7 +20,7 @@ class Penyaluran extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
         
         
-        $data['umi'] = $this->umi->overview();
+        $data['umi'] = $this->umi->penyalurandanOSL();
 
         ini_set('max_execution_time', 300);
 

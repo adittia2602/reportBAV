@@ -1,13 +1,13 @@
             <!-- Container fluid  -->
             <div class="container-fluid">
               
-              <div class="card-group">
+              <div class="overview card-group">
                   <div class="card border-right">
                       <div class="card-body">
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <div class="d-inline-flex align-items-center">
-                                      <h2 class="text-dark mb-1 font-weight-medium"><?= number_format($overview->totaldebitur,0, '', '.'); ?></h2>
+                                      <h2 class="text-dark mb-1 font-weight-medium"><?= $overview->totaldebitur; ?></h2>
                                   </div>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Debitur</h6>
                               </div>
@@ -22,7 +22,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp</sup> <?= number_format($overview->totalpenyaluran,0, '', '.'); ?></h2>
+                                          class="set-doller">Rp</sup> <?= $overview->totalpenyaluran; ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Penyaluran
                                   </h6>
                               </div>
@@ -52,7 +52,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp </sup> <?= number_format($overview->totalpembiayaan,0, '', '.'); ?></h2>
+                                          class="set-doller">Rp </sup> <?= $overview->totalpembiayaan; ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pembiayaan
                                   </h6>
                               </div>
@@ -64,38 +64,34 @@
                   </div>
               </div>
 
-              <div class="row">
+              <div class="petaPenyaluran row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-body">
+                              <div class="d-flex align-items-center mb-4">
+                                  <h4 class="card-title">Peta Penyaluran UMi - BAV</h4>
+                              </div>
+                              <div id="visitorMap3"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>    
+
+              <div class="chartPenyaluran row">
                   <div class="col-lg-6 col-md-12">
                       <div class="card">
                           <div class="card-body">
                               <h4 class="card-title">Total Debitur UMi</h4>
-                              <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
+                              <canvas id="debtorChart"></canvas>
+
                               <ul class="list-style-none mb-0">
+                                <?php foreach ($master_debitur as $m) :?>
                                   <li>
                                       <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                      <span class="text-muted">Januari</span>
-                                      <span class="text-dark float-right font-weight-medium">1000</span>
+                                      <span class="text-muted"><?= $m->bulan; ?></span>
+                                      <span class="text-dark float-right font-weight-medium"> <?= $m->debitur; ?></span>
                                   </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                      <span class="text-muted">Februari</span>
-                                      <span class="text-dark float-right font-weight-medium">1100</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">Maret</span>
-                                      <span class="text-dark float-right font-weight-medium">1204</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">April</span>
-                                      <span class="text-dark float-right font-weight-medium">1300</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">Mei</span>
-                                      <span class="text-dark float-right font-weight-medium">1400</span>
-                                  </li>
+                                <?php endforeach; ?>
                               </ul>
                           </div>
                       </div>
@@ -104,45 +100,28 @@
                       <div class="card">
                           <div class="card-body">
                               <h4 class="card-title">Total Penyaluran UMi</h4>
-                              <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
+                              <canvas id="disburseChart"></canvas>
+
                               <ul class="list-style-none mb-0">
+                                <?php foreach ($master_penyaluran as $m) :?>
                                   <li>
                                       <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                      <span class="text-muted">Januari</span>
-                                      <span class="text-dark float-right font-weight-medium">Rp. 10 M</span>
+                                      <span class="text-muted"><?= $m->bulan; ?></span>
+                                      <span class="text-dark float-right font-weight-medium"> <?= $m->penyaluran; ?></span>
                                   </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                      <span class="text-muted">Februari</span>
-                                      <span class="text-dark float-right font-weight-medium">Rp. 11 M</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">Maret</span>
-                                      <span class="text-dark float-right font-weight-medium">Rp. 12 M</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">April</span>
-                                      <span class="text-dark float-right font-weight-medium">Rp. 14 M</span>
-                                  </li>
-                                  <li class="mt-3">
-                                      <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                      <span class="text-muted">Mei</span>
-                                      <span class="text-dark float-right font-weight-medium">Rp. 15 M</span>
-                                  </li>
+                                <?php endforeach; ?>
                               </ul>
                           </div>
                       </div>
                   </div>
               </div>
 
-              <div class="row">
+              <div class="reminder row">
                   <div class="col-12">
                       <div class="card">
                           <div class="card-body">
                               <div class="d-flex align-items-center mb-4">
-                                  <h4 class="card-title">Perkiraan Revolving</h4>
+                                  <h4 class="card-title">Reminder: Expired Pencairan</h4>
                                   <!-- <div class="ml-auto">
                                       <div class="dropdown sub-dropdown">
                                           <button class="btn btn-link text-muted dropdown-toggle" type="button"
@@ -162,68 +141,45 @@
                                   <table class="table no-wrap v-middle mb-0">
                                       <thead>
                                           <tr class="border-0">
-                                              <th class="border-0 font-14 font-weight-medium text-muted">Penyalur   </th>
-                                              <th class="border-0 font-14 font-weight-medium text-muted px-2">OSL Pembiayan </th>
-                                              <th class="border-0 font-14 font-weight-medium text-muted">OSL Penyaluran</th>
-                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">Status</th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted ">PENYALUR   </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center px-2">TOTAL PEMBIAYAAN </th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">TOTAL PENYALURAN</th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">DUE DATE</th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">STATUS</th>
                                               <th class="border-0 font-14 font-weight-medium text-muted text-center"> Keterangan</th>
                                           </tr>
                                       </thead>
                                       <tbody>
+                                        <?php foreach ($reminder as $r) :
+                                            $selisih = $r->duedate - $r->curdate ;
+                                            if ($selisih < 0){
+                                                $status = "text-danger";
+                                            } else if ($selisih <= 30) {
+                                                $status = "text-warning";
+                                            } else {
+                                                $status = "text-success";
+                                            }
+                                        ?>
                                           <tr>
                                               <td class="border-top-0 px-2 py-4">
                                                   <div class="d-flex no-block align-items-center">
                                                       <div class="">
-                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">KOMIDA</h5>
-                                                          <span class="text-muted font-14">Koperasi Mitra Dhuafa</span>
+                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium"><?= $r->penyalur;?></h5>
+                                                          <span class="text-muted font-14"><?= $r->kodepenyalur;?></span>
                                                       </div>
                                                   </div>
                                               </td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 192.111.121.000</td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 192.300.121.000</td>
+                                              <td class="border-top-0 text-center text-muted px-2 py-4 font-14 center"><?= $r->totalpencairan;?></td>
+                                              <td class="border-top-0 text-center text-muted px-2 py-4 font-14"><?= $r->totalpenyaluran;?></td>
+                                              <td class="border-top-0 text-center text-muted px-2 py-4 font-14"><?= $r->tglexp;?></td>
                                               <td class="border-top-0 text-center px-2 py-4"><i
-                                                      class="fa fa-circle text-success font-12" data-toggle="tooltip"
-                                                      data-placement="top" title="In Testing"></i></td>
+                                                      class="fa fa-circle <?= $status ?> font-12" data-toggle="tooltip"
+                                                      data-placement="top" title="Penyaluran on progress"></i></td>
                                               <td class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
-                                                  + Rp. 200.000.000
+                                                    <?= $selisih ;?> hari
                                               </td>
                                           </tr>
-                                          <tr>
-                                              <td class="border-top-0 px-2 py-4">
-                                                  <div class="d-flex no-block align-items-center">
-                                                      <div class="">
-                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">ITQAN</h5>
-                                                          <span class="text-muted font-14">Koperasi BMT ITQAN</span>
-                                                      </div>
-                                                  </div>
-                                              </td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 192.111.121.000</td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 192.300.121.000</td>
-                                              <td class="border-top-0 text-center px-2 py-4"><i
-                                                      class="fa fa-circle text-success font-12" data-toggle="tooltip"
-                                                      data-placement="top" title="In Testing"></i></td>
-                                              <td class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
-                                                  + Rp. 200.000.000
-                                              </td>
-                                          </tr>
-                                          <tr>
-                                              <td class="border-top-0 px-2 py-4">
-                                                  <div class="d-flex no-block align-items-center">
-                                                      <div class="">
-                                                          <h5 class="text-dark mb-0 font-16 font-weight-medium">BIF</h5>
-                                                          <span class="text-muted font-14">Koperasi BMT BINA INSANUL FIKRI</span>
-                                                      </div>
-                                                  </div>
-                                              </td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 192.111.121.000</td>
-                                              <td class="border-top-0 text-muted px-2 py-4 font-14">Rp. 100.300.121.000</td>
-                                              <td class="border-top-0 text-center px-2 py-4"><i
-                                                      class="fa fa-circle text-danger font-12" data-toggle="tooltip"
-                                                      data-placement="top" title="In Testing"></i></td>
-                                              <td class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
-                                                  + Rp. 90.000.000
-                                              </td>
-                                          </tr>
+                                        <?php endforeach; ?>
                                       </tbody>
                                   </table>
                               </div>
@@ -252,8 +208,85 @@
     <script src="<?php echo base_url('assets/'); ?>js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="<?php echo base_url('assets/'); ?>js/custom.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>libs/chart.js/dist/Chart.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.vmap.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.vmap.indonesia.js"></script>
 
     <!-- Page Specific JS File -->
+    <script type="text/javascript">
+        var dataPenyaluran = JSON.parse('<?php echo $petapenyaluran; ?>');
+
+        jQuery(document).ready(function() {
+            jQuery('#visitorMap3').vectorMap({  
+                map: 'indonesia_id',
+                backgroundColor: '#ffffff',
+                borderColor: '#f2f2f2',
+                borderOpacity: .8,
+                borderWidth: 1,
+                hoverColor  : '#000',
+                hoverOpacity: .8,
+                color: '#ddd',
+                selectedRegions: false,
+                showTooltip: true,
+                
+                series: {
+                    regions: [{values: dataPenyaluran,}]
+                },
+                onLabelShow: function(event, label, code){
+                    var data =  label[0].innerHTML.toUpperCase()
+                                + ' <b>  <br/> Total Debitur : '
+                                + dataPenyaluran[code]['DEBITUR']
+                                + ' </b> <br/> <b> Total Penyaluran : '
+                                + dataPenyaluran[code]['PENYALURAN']
+                                + '</b>'; 
+                    label.html(data);
+                },
+                onRegionClick: function(element, code, region)
+                {
+                    var message = region.toUpperCase()
+                                + ' | Total Debitur : '
+                                + dataPenyaluran[code]['DEBITUR']
+                                + ' | Total Penyaluran : '
+                                + dataPenyaluran[code]['PENYALURAN']
+                                + ' |'; 
+            
+                    alert(message);
+                }
+            });
+        });
+    </script>
+    <script>
+        var debtor = JSON.parse('<?php echo $overall_debitur; ?>');
+        var umi_disburse = JSON.parse('<?php echo $overall_penyaluran; ?>');
+
+        var opt1 = {
+            legend: { display: false },
+            scales: {
+            yAxes: [{
+                gridLines: { drawBorder: false, color: '#f2f2f2' },
+                ticks: { beginAtZero: true }
+            }],
+            xAxes: [{
+                ticks: { display: true },
+                gridLines: { display: false }
+            }]
+            }
+        };
+
+        var ctx = document.getElementById("debtorChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: debtor,
+        options:opt1
+        });
+
+        var ctx = document.getElementById("disburseChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: umi_disburse,
+        options: opt1
+        });
+    </script>
     
 </body>
 

@@ -129,6 +129,7 @@ class WS_mods extends CI_Model
 
             $noa = [
                 'id_ts'         =>  $ts,
+                'id'            =>  $item['ID'],
                 'kodepenyalur'	=>	$item['KODEPENYALUR'],
                 'provinsi'	    =>	$item['PROVINSI'],
                 'kabkota'	    =>	$item['KABKOTA'],
@@ -176,6 +177,25 @@ class WS_mods extends CI_Model
 
         }
 
+        // $updateos = $this->updateOSdebitur();
+        $updateos = "NOT";
+
+
+        if ( $updateos == 'updated' && $this->db->affected_rows() > 0 ){
+            $result = "Data Noa & Update Outstanding berhasil di insert!";
+        } elseif ( $updateos != 'updated' && $this->db->affected_rows() > 0 ){
+            $result = "Data Noa berhasil di insert! dan Error update OS : ". $updateos ;
+        } else {
+            $err = $this->db->error(); 
+            $result = $err['message'];
+        }
+        
+        return $result ;
+    }
+
+    public function updateOSdebitur()
+    {
+ 
         // update data OS Debitur
         $dataFetch = $this->fetchData('GET','osdebtor','');
         foreach ($dataFetch as $item){
@@ -183,17 +203,18 @@ class WS_mods extends CI_Model
                 'outstanding' => $item['OUTSTANDING'],
             ];
 
-            $this->db->where('noakad', $item['NOAKAD']);
+            $this->db->where('id', $item['ID']);
             $result=$this->db->update('umi_noa', $os);
         }
 
         if ( $this->db->affected_rows() > 0 ){
-            $result['message'] = "Data Noa & Update Outstanding berhasil di insert!";
+            $result = "updated";
         } else {
-            $result = $this->db->error(); 
+           $err = $this->db->error(); 
+            $result = $err['message'];
         }
         
-        return $result['message'] ;
+        return $result ;
     }
 
     public function updateAkadpembiayaan()
@@ -214,6 +235,7 @@ class WS_mods extends CI_Model
         foreach ($dataFetch as $item) {
             $effectiveDate = date('Y-m-d', strtotime("+5 months", strtotime($item['TGLAKAD'])));
             $akad = [
+                'kodepenyalur' => $item['KODEPENYALUR'],
                 'penyalur' => $item['PENYALUR'],
                 'tglakad' => $item['TGLAKAD'],
                 'nilaiakad' => $item['NILAIAKAD'],

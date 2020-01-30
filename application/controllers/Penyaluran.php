@@ -89,7 +89,7 @@ class Penyaluran extends CI_Controller
         $object->setActiveSheetIndex(0);
 
         $object->getActiveSheet()->setCellValue('A1' ,'NO');
-        $object->getActiveSheet()->setCellValue('B1' ,'NIK');
+        $object->getActiveSheet()->setCellValue('B1' ,'NIK', PHPExcel_Cell_DataType::TYPE_STRING);
         $object->getActiveSheet()->setCellValue('C1' ,'NAMA');
         $object->getActiveSheet()->setCellValue('D1' ,'BIRTHDATE');
         $object->getActiveSheet()->setCellValue('E1' ,'PENDIDIKAN');
@@ -97,20 +97,20 @@ class Penyaluran extends CI_Controller
         $object->getActiveSheet()->setCellValue('G1' ,'ALAMAT');
         $object->getActiveSheet()->setCellValue('H1' ,'KODEWILAYAH');
         $object->getActiveSheet()->setCellValue('I1' ,'KODEPOS');
-        $object->getActiveSheet()->setCellValue('J1' ,'NPWP');
+        $object->getActiveSheet()->setCellValue('J1' ,'NPWP', PHPExcel_Cell_DataType::TYPE_STRING);
         $object->getActiveSheet()->setCellValue('K1' ,'MULAIUSAHA');
         $object->getActiveSheet()->setCellValue('L1' ,'ALAMATUSAHA');
         $object->getActiveSheet()->setCellValue('M1' ,'NOIZIN');
         $object->getActiveSheet()->setCellValue('N1' ,'MODAL');
         $object->getActiveSheet()->setCellValue('O1' ,'JUMLAHPEKERJA');
         $object->getActiveSheet()->setCellValue('P1' ,'OMSET');
-        $object->getActiveSheet()->setCellValue('Q1' ,'NOMORHP');
+        $object->getActiveSheet()->setCellValue('Q1' ,'NOMORHP', PHPExcel_Cell_DataType::TYPE_STRING);
         $object->getActiveSheet()->setCellValue('R1' ,'KONDISIRUMAH');
         $object->getActiveSheet()->setCellValue('S1' ,'URAIANAGUNAN');
         $object->getActiveSheet()->setCellValue('T1' ,'JK');
         $object->getActiveSheet()->setCellValue('U1' ,'MARRIAGE');
-        $object->getActiveSheet()->setCellValue('V1' ,'NOAKAD');
-        $object->getActiveSheet()->setCellValue('W1' ,'NOREKENING');
+        $object->getActiveSheet()->setCellValue('V1' ,'NOAKAD', PHPExcel_Cell_DataType::TYPE_STRING);
+        $object->getActiveSheet()->setCellValue('W1' ,'NOREKENING', PHPExcel_Cell_DataType::TYPE_STRING);
         $object->getActiveSheet()->setCellValue('X1' ,'TANGGALAKAD');
         $object->getActiveSheet()->setCellValue('Y1' ,'TANGGALJATUHTEMPO');
         $object->getActiveSheet()->setCellValue('Z1' ,'SUKUBUNGA');
@@ -149,11 +149,11 @@ class Penyaluran extends CI_Controller
             $object->getActiveSheet()->setCellValue('W' . $baris, $item['norekening']);
             $object->getActiveSheet()->setCellValue('X' . $baris, $item['tanggalakad']);
             $object->getActiveSheet()->setCellValue('Y' . $baris, $item['tanggaljatuhtempo']);
-            $object->getActiveSheet()->setCellValue('Z1' . $baris, $item['sukubunga']);
-            $object->getActiveSheet()->setCellValue('AA1' . $baris, $item['nilaiakad']);
-            $object->getActiveSheet()->setCellValue('AB1' . $baris, $item['tglupload']);
-            $object->getActiveSheet()->setCellValue('AC1' . $baris, $item['tgldropping']);
-            $object->getActiveSheet()->setCellValue('AD1' . $baris, $item['sektor']);
+            $object->getActiveSheet()->setCellValue('Z' . $baris, $item['sukubunga']);
+            $object->getActiveSheet()->setCellValue('AA' . $baris, $item['nilaiakad']);
+            $object->getActiveSheet()->setCellValue('AB' . $baris, $item['tglupload']);
+            $object->getActiveSheet()->setCellValue('AC' . $baris, $item['tgldropping']);
+            $object->getActiveSheet()->setCellValue('AD' . $baris, $item['sektor']);
 
             $baris++; $no++;
         }

@@ -21,6 +21,12 @@ class Refresh extends CI_Controller
         $result = $this->ws->updateDebitur();
         print_r($result);
     }
+
+    public function updateos()
+    {
+        $result = $this->ws->updateOSdebitur();
+        print_r($result);
+    }
     
     public function reportakad()
     {

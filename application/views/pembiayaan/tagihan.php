@@ -19,7 +19,9 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th>PENYALUR</th>
-                                            <th>FASILITAS KE-</th>
+                                            <th>TGL AKAD</th>
+                                            <th>BATCH</th>
+                                            <th>TGL PENCAIRAN</th>
                                             <th>NILAI PENCAIRAN</th>
                                             <th>TGL JATUH TAMPO</th>
                                             <th>ANGSURAN POKOK</th>
@@ -28,16 +30,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($akad as $a) : ?>
+                                        <?php foreach ($tagihan as $a) : ?>
                                             <tr>
-                                                <td><?= $a['PENYALUR']; ?></td>
-                                                <td class="text-center"><?= $a['PENYALURAN_KE']; ?></td>
-                                                <td class="text-right"><?= number_format($a['NILAI_PENCAIRAN'],0, '', '.'); ?></td>
-                                                <td><?= $a['TGL_BAYAR']; ?></td>
-                                                <td class="text-right"><?= number_format($a['NILAI_POKOK'],0, '', '.'); ?></td>
-                                                <td class="text-right"><?= number_format($a['NILAI_BUNGA'],0, '', '.'); ?></td>
-                                                <td class="text-right"><?= number_format($a['TOTAL_BAYAR'],0, '', '.'); ?></td>
-                                                <td class="text-right"><?= number_format($a['OUTSTANDING'],0, '', '.'); ?></td>
+                                                <td><?= $a['penyalur']; ?></td>
+                                                <td><?= $a['tglakad']; ?></td>
+                                                <td ><?= number_format($a['batch'],0, '', '.'); ?></td>
+                                                <td><?= $a['tglpencairan']; ?></td>
+                                                <td><?= $a['nilaipencairan']; ?></td>
+                                                <td><?= $a['tgljthtempo']; ?></td>
+                                                <td class="text-right"><?= number_format($a['angsuranpokok'],0, '', '.'); ?></td>
+                                                <td class="text-right"><?= number_format($a['angsuranbunga'],0, '', '.'); ?></td>
+                                                <td class="text-right"><?= number_format($a['totalangsuran'],0, '', '.'); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>

@@ -33,6 +33,12 @@ class Refresh extends CI_Controller
         $result = $this->ws->updateAkadpembiayaan();
         print_r($result);
     }
+
+    public function updatetagihan()
+    {
+        $result = $this->ws->insTagihan();
+        print_r($result);
+    }
     
 
 }

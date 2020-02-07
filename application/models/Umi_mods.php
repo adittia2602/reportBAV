@@ -41,7 +41,7 @@ class Umi_mods extends CI_Model
     }
 
     public function duedateAkad()
-    {
+        {
         $penyaluran = new StdClass();
 
         $query = "  SELECT 
@@ -58,17 +58,19 @@ class Umi_mods extends CI_Model
         $contract = $this->db->query($query)->result_array();
         
 
-        $query = " SELECT kodepenyalur, SUM(nilaiakad) AS totalpenyaluran FROM umi_noa GROUP BY 1 ";
-        $disbursement = $this->db->query($query)->result_array();
-        foreach ( $disbursement as $tp ){  
-            $penyaluran->$tp['kodepenyalur'] = $tp['totalpenyaluran']; 
-        }
+        // $query = " SELECT kodepenyalur, SUM(nilaiakad) AS totalpenyaluran FROM umi_noa GROUP BY 1 ";
+        // $disbursement = $this->db->query($query)->result_array();
+        // foreach ( $disbursement as $tp ){  
+        //     $penyaluran->$tp['kodepenyalur'] = $tp['totalpenyaluran']; 
+        // }
         
     
         foreach ($contract as $pembiayaan){
             $kdpenyalur = $pembiayaan['kodepenyalur'];
-            $p = $penyaluran->$kdpenyalur;
-            if( $pembiayaan['totalpencairan'] > $p ){
+
+            $query = " SELECT SUM(nilaiakad) AS totalpenyaluran FROM umi_noa WHERE kodepenyalur = ". $kdpenyalur ." AND tglakad >= ". $pembiayaan['tglakad_'] ;
+            $disbursement = $this->db->query($query);
+            if( $pembiayaan['totalpencairan'] > $disbursement['totalpenyaluran'] ){
                 $data[] = (object) array(
                     'kodepenyalur'    => $kdpenyalur,
                     'penyalur'        => $pembiayaan['penyalur'],
@@ -77,7 +79,7 @@ class Umi_mods extends CI_Model
                     'duedate'         => $pembiayaan['duedate'],
                     'curdate'         => $pembiayaan['curdate'],
                     'totalpencairan'  => number_format($pembiayaan['totalpencairan'],0, '', '.'),
-                    'totalpenyaluran' => number_format($p,0, '', '.')
+                    'totalpenyaluran' => number_format($disbursement['totalpenyaluran'],0, '', '.')
                 );
             }
         }
@@ -88,6 +90,13 @@ class Umi_mods extends CI_Model
     public function akadPembiayaan()
     {
         $query = "SELECT * FROM umi_akad";
+
+        return $this->db->query($query)->result_array();
+    }
+    
+    public function tagihanPembiayaan()
+    {
+        $query = "SELECT * FROM umi_tagihan ORDER BY tgljthtempo ASC";
 
         return $this->db->query($query)->result_array();
     }
@@ -160,5 +169,6 @@ class Umi_mods extends CI_Model
      
         return $data;
     }
+
     
 }

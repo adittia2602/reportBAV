@@ -34,8 +34,7 @@ class Pembiayaan extends CI_Controller
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
 
-        // $data['akad'] = $this->umi->fetchData('GET','bav/pembayaranpenyalur','');
-        ini_set('max_execution_time', 300);
+        $data['tagihan'] = $this->umi->tagihanPembiayaan();
 
         $this->load->view('templates/header', $data); // untuk memanggil template header
         $this->load->view('templates/topbar', $data);

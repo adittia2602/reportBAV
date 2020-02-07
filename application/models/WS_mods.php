@@ -40,16 +40,17 @@ class WS_mods extends CI_Model
     {
         $dataFetch = $this->fetchData('GET','listlinkage','');
         
+        $this->db->truncate('umi_tagihan');
+        
         foreach ($dataFetch as $item){
             $penyalur = [
                 'did' => $item['KODEBARU'],
                 'nama' => $item['PENYALUR'],
             ];
-            $batchpenyalur[] = $penyalur;
+            
         }
 
-        $this->db->update_batch('umi_penyalur', $batchpenyalur, 'did');
-
+        $this->db->insert_string('umi_penyalur', $penyalur);
 
         if ( $this->db->affected_rows() > 0 ){
             $result['message'] = "Data Penyalur berhasil di insert!";
@@ -253,6 +254,50 @@ class WS_mods extends CI_Model
 
         if ( $this->db->affected_rows() > 0 ){
             $result['message'] = "Data Akad Pembiayaan berhasil di insert!";
+        } else {
+            $result = $this->db->error(); 
+        }
+        
+        return $result['message'] ;
+    }
+
+    public function insTagihan()
+    {
+        // create parent
+        $ts = time();
+        $parent = [
+            'debitur' => FALSE,
+            'overview' => FALSE,
+            'id' => $ts,
+            'akad' => FALSE, 
+            'tagihan' => TRUE 
+        ];
+        $this->db->insert('umi_ts', $parent);
+
+        $this->db->truncate('umi_tagihan');
+
+        $dataFetch = $this->fetchData('GET','tagihan','');
+        foreach ($dataFetch as $item) {
+            $tagihan = [
+                'id_ts' => $ts,
+                'penyalur' => $item['PENYALUR'],
+                'tglakad' => $item['TGLAKAD'],
+                'batch' => $item['BATCH'],
+                'tglpencairan' => $item['TGLPENCAIRAN'],
+                'nilaipencairan' => $item['NILAIPENCAIRAN'],
+                'tgljthtempo' => $item['JTHTEMPO'],
+                'angsuranpokok' => $item['TAGIHAN_POKOK'],
+                'angsuranbunga' => $item['TAGIHAN_BUNGA'],
+                'totalangsuran' => $item['TOTAL_ANGSURAN'],
+            ];
+
+            $insert_query = $this->db->insert_string('umi_tagihan', $tagihan);
+            $insert_query = str_replace('INSERT INTO','INSERT IGNORE INTO',$insert_query);
+            $this->db->query($insert_query);
+        }
+
+        if ( $this->db->affected_rows() > 0 ){
+            $result['message'] = "Data Tagihan berhasil di insert!";
         } else {
             $result = $this->db->error(); 
         }

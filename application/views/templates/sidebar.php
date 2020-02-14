@@ -87,6 +87,11 @@
                 <div class="row">
                     <div class="col-7 align-self-center">
                         <h2 class="page-title text-truncate text-dark font-weight-medium mb-1"><?=$title?></h2>
+                        <?php if ($title == 'Dashboard' || $title == 'Overview' || $title == 'Wilayah' || 
+                                $title == 'List Debitur' || $title == 'Akad-Pencairan' || $title == 'Data Tagihan Bulan ini' || 
+                                $title == 'Debitur' ) { ?>
+                            <p class="text-muted">Data update per: <?= $time['last_update'];?></p>
+                        <?php } ?>
                     </div>
                     <div class="col-5 align-self-center">
                         <div class="customize-input float-right">

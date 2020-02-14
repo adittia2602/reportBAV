@@ -17,6 +17,7 @@ class Pembiayaan extends CI_Controller
         $data['subtitle'] = 'Akad dan Pencairan Pembiayaan Ultra Mikro';
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
+        $data['time'] = $this->umi->lastupdate();
 
         $data['akad'] = $this->umi->akadPembiayaan();
 
@@ -33,6 +34,7 @@ class Pembiayaan extends CI_Controller
         $data['subtitle'] = 'Data Tagihan BAV';
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
+        $data['time'] = $this->umi->lastupdate();
 
         $data['tagihan'] = $this->umi->tagihanPembiayaan();
 

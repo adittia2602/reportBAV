@@ -3,79 +3,68 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Umi_mods extends CI_Model
 {
-
+    public function lastupdate()
+    {
+        $query = "SELECT DATE(timestamp) as last_update
+                    FROM umi_ts 
+                    order by timestamp desc limit 1";
+        return $this->db->query($query)->row_array();
+    }
+    
     public function listPenyalur()
     {
         $query = "SELECT did, nama FROM umi_penyalur";
 
         return $this->db->query($query)->result_array();
     }
-
+    
     public function overview()
     {
-        $query = "SELECT count(noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran FROM umi_noa";
-        $penyaluran = $this->db->query($query)->row_array();
+        $query = "SELECT B.nama as penyalur, A.* FROM umi_overview A, umi_penyalur B WHERE A.kodepenyalur = B.did";
 
-        $query1 = "SELECT count(*) as totalpenyalur FROM umi_penyalur";
-        $linkage = $this->db->query($query1)->row_array();
-
-        $query2 = "SELECT sum(nilaipencairan) as totalpencairan FROM umi_akad";
-        $pembiayaan = $this->db->query($query2)->row_array();
-
-        $overview = new StdClass();
-        $overview->totaldebitur = number_format($penyaluran['totaldebitur'],0, '', '.');
-        $overview->totalpenyaluran = number_format($penyaluran['totalpenyaluran'],0, '', '.');
-        $overview->totalpenyalur = number_format($linkage['totalpenyalur'],0, '', '.');
-        $overview->totalpembiayaan = number_format($pembiayaan['totalpencairan'],0, '', '.');
-
-
-        return $overview;
+        return $this->db->query($query)->result_array();
     }
 
     public function penyaluranBulanan()
     {
-        $query = "SELECT a.ts, a.tahun, a.bulan, b.nama as penyalur, count(a.noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran
-                  FROM umi_noa a, umi_penyalur b WHERE a.kodepenyalur = b.did GROUP BY 1, 2, 3";
+        $query = "SELECT a.tahun, a.bulan, b.nama as penyalur, count(a.noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran
+                  FROM umi_noa a, umi_penyalur b WHERE a.kodepenyalur = b.did GROUP BY 1, 2";
 
         return $this->db->query($query)->result_array();
     }
 
     public function duedateAkad()
-        {
-        $penyaluran = new StdClass();
+    {
 
-        $query = "  SELECT 
-                        kodepenyalur,
-                        penyalur, 
-                        MAX(tglakad) AS tglakad_, 
-                        MAX(target) AS tglexp, 
-                        DATEDIFF(MAX(target), MAX(tglakad)) AS duedate, 
-                        DATEDIFF(CURDATE(), MAX(tglakad)) AS curdate, 
-                        sum(nilaipencairan) AS totalpencairan 
-                    FROM umi_akad
-                    GROUP BY 1 
-                    ORDER BY kodepenyalur ";
+        $query = "  SELECT A.kodepenyalur, A.penyalur, 
+                            A.tglakad , 
+                            A.target AS tglexp, 
+                            DATEDIFF(A.target, A.tglakad) AS duedate, 
+                            DATEDIFF(CURDATE(), A.tglakad) AS curdate, 
+                            A.nilaiakad AS totalpencairan 
+                    FROM `umi_akad` A
+                    WHERE A.tglakad = (SELECT MAX(tglakad) FROM umi_akad WHERE kodepenyalur = A.kodepenyalur)
+                    GROUP BY kodepenyalur, tglakad ";
         $contract = $this->db->query($query)->result_array();
         
-
-        // $query = " SELECT kodepenyalur, SUM(nilaiakad) AS totalpenyaluran FROM umi_noa GROUP BY 1 ";
-        // $disbursement = $this->db->query($query)->result_array();
-        // foreach ( $disbursement as $tp ){  
-        //     $penyaluran->$tp['kodepenyalur'] = $tp['totalpenyaluran']; 
-        // }
         
-    
         foreach ($contract as $pembiayaan){
             $kdpenyalur = $pembiayaan['kodepenyalur'];
+            $tglexp = $pembiayaan['tglexp'];
+            $curdate = date('Y-m-d') ;
+          
+            
+            if ($tglexp <  $curdate) {continue;};
 
-            $query = " SELECT SUM(nilaiakad) AS totalpenyaluran FROM umi_noa WHERE kodepenyalur = ". $kdpenyalur ." AND tglakad >= ". $pembiayaan['tglakad_'] ;
-            $disbursement = $this->db->query($query);
+            $query = " SELECT SUM(nilaiakad) AS totalpenyaluran FROM umi_noa WHERE kodepenyalur = '". $kdpenyalur ."' AND tanggalakad >= '". $pembiayaan['tglakad'] . "'" ;
+            $disbursement = $this->db->query($query)->row_array();
+
             if( $pembiayaan['totalpencairan'] > $disbursement['totalpenyaluran'] ){
                 $data[] = (object) array(
                     'kodepenyalur'    => $kdpenyalur,
                     'penyalur'        => $pembiayaan['penyalur'],
-                    'tglakad'         => $pembiayaan['tglakad_'],
-                    'tglexp'          => $pembiayaan['tglexp'],
+                    'tglakad'         => $pembiayaan['tglakad'],
+                    'tglexp'          => $tglexp,
                     'duedate'         => $pembiayaan['duedate'],
                     'curdate'         => $pembiayaan['curdate'],
                     'totalpencairan'  => number_format($pembiayaan['totalpencairan'],0, '', '.'),
@@ -83,7 +72,9 @@ class Umi_mods extends CI_Model
                 );
             }
         }
-     
+        // print_r ($data);
+        // die;
+    
         return $data;
     }
 
@@ -110,12 +101,15 @@ class Umi_mods extends CI_Model
 
     public function dataPenyaluran($idpenyalur)
     {
-        $query = "SELECT nik, nama, birthdate, pendidikan, pekerjaan, alamat, kodewilayah, kodepos, npwp, 
+        $query = "SELECT nik, nama, birthdate, pendidikan, pekerjaan, alamat, provinsi, kabkota, npwp, 
                          mulaiusaha, alamatusaha, noizin, modal, jumlahpekerja, omset,
                          nomorhp, kondisirumah, uraianagunan, jk, marriage, marriage,
                          noakad, norekening, tanggalakad, tanggaljatuhtempo,  
                          sukubunga, nilaiakad, tglupload, tgldropping, sektor
                   FROM umi_noa where kodepenyalur = $idpenyalur";
+        // print_r($query);
+        // print_r($this->db->query($query)->result_array());
+        // die;
 
         return $this->db->query($query)->result_array();
     }
@@ -151,9 +145,8 @@ class Umi_mods extends CI_Model
         $query = " SELECT kodepenyalur, count(nik) AS totaldebitur, SUM(nilaiakad) AS totalpenyaluran, SUM(outstanding) AS ospenyaluran FROM umi_noa GROUP BY 1 ";
         $penyaluran = $this->db->query($query)->result_array();
         
-    
-        foreach ($penyaluran as $py) {
-            foreach ($pembiayaan as $pb) {
+        foreach ($pembiayaan as $pb) {
+            foreach ($penyaluran as $py) {
                 if ( $py['kodepenyalur'] == $pb->kodepenyalur ){
                     $data[] = (object) array(
                         'penyalur' =>$pb->penyalur,
@@ -167,6 +160,45 @@ class Umi_mods extends CI_Model
             }
         }
      
+        return $data;
+    }
+
+    public function cariNik($nik)
+    {
+        $query = "SELECT B.nama as penyalur, A.nik, A.nama,  A.birthdate, A.jk, A.marriage, A.nomorhp, A.alamat, A.provinsi, A.kabkota, 
+                         A.noakad, A.norekening, A.tanggalakad, 
+                         A.tanggaljatuhtempo, A.nilaiakad, A.sukubunga, A.tgldropping, A.tglupload, A.sektor, A.outstanding
+                  FROM umi_noa A, umi_penyalur B WHERE A.kodepenyalur = B.did AND nik = '$nik'";
+
+        $result = $this->db->query($query)->result_array();
+        $data = new stdClass();
+
+        foreach ($result as $r){
+            $data->NIK              = $r['nik'];
+            $data->NAMA             = $r['nama'];
+            $data->TGLLAHIR         = $r['birthdate'];
+            $data->JK               = $r['jk'];
+            $data->STATUS           = $r['marriage'];
+            $data->NOHP             = $r['nomorhp'];
+            $data->ALAMAT           = $r['alamat'];
+            $data->PROVINSI         = $r['provinsi'];
+            $data->KABKOTA          = $r['kabkota'];
+            $data->PEMBIAYAAN[]     = (object) array(
+                                        'PENYALUR'      => $r['penyalur'],
+                                        'NOAKAD'        => $r['noakad'],
+                                        'NOREKENING'    => $r['norekening'],
+                                        'TGLAKAD'       => $r['tanggalakad'],
+                                        'TGLJTHTEMPO'   => $r['tanggaljatuhtempo'],
+                                        'NILAIAKAD'     => $r['nilaiakad'],
+                                        'BUNGA'         => $r['sukubunga'],
+                                        'TGLDROPPING'   => $r['tgldropping'],
+                                        'SEKTOR'        => $r['sektor'],
+                                        'OUTSTANDING'   => $r['outstanding']
+                                    );
+        }
+
+        // print_r($data);
+        // die;
         return $data;
     }
 

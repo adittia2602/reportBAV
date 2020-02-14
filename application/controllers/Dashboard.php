@@ -16,15 +16,28 @@ class Dashboard extends CI_Controller
         $data['title'] = 'Dashboard';
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
+        $data['time'] = $this->umi->lastupdate();
         ini_set('max_execution_time', 300);
 
         // GET DATA
-        $data['overview'] = $this->umi->overview();
         $data['reminder'] = $this->umi->duedateAkad();
-        $data['petapenyaluran']  = $this->ws->fetchData('GET','report/penyaluran/provinsi','');
+        $data['penyaluran'] = $this->umi->overview();
 
+        $totpenyalur = $totdebitur = $totpenyaluran = $totpembiayaan = 0;
+        $data['overview'] = new stdClass();
+        foreach ($data['penyaluran'] as $r){
+            $totpenyalur += 1;
+            $totdebitur += $r['totaldebitur'];
+            $totpenyaluran += $r['totalpenyaluran'];
+            $totpembiayaan += $r['totalpembiayaan'];
+        }
+        $data['overview']->totaldebitur = number_format($totdebitur,0, '', '.');
+        $data['overview']->totalpenyaluran = number_format($totpenyaluran,0, '', '.');
+        $data['overview']->totalpenyalur = number_format($totpenyalur,0, '', '.');
+        $data['overview']->totalpembiayaan = number_format($totpembiayaan,0, '', '.');
         
         $bulanan = $this->umi->penyaluranBulanan();
+
 
         // BAR-CHART DEBITUR & PENYALURAN
         $dataset  = new StdClass;
@@ -34,12 +47,12 @@ class Dashboard extends CI_Controller
             $bulan[]     = $row["bulan"];
 
             $mstdbt[] = (object) array(
-                'bulan'     => $row["bulan"],
+                'bulan'     => $row["bulan"] . " / " . $row["tahun"],
                 'debitur'   => number_format($row["totaldebitur"],0, '', '.') . " Debitur"
             );
 
             $mstpnyl[] = (object) array(
-                'bulan'      => $row["bulan"],
+                'bulan'      => $row["bulan"]. " / " . $row["tahun"],
                 'penyaluran' => "Rp. ". number_format($row["totalpenyaluran"],0, '', '.')
             );
             

@@ -2,6 +2,8 @@
             <div class="container-fluid">
               
               <div class="overview card-group">
+                    <div class="d-flex align-items-center mb-4">
+                    </div>
                   <div class="card border-right">
                       <div class="card-body">
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
@@ -22,7 +24,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp</sup> <?= $overview->totalpenyaluran; ?></h2>
+                                          class="set-doller">Rp</sup> <?= $pd = substr($overview->totalpenyaluran,0,3)." T"; ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Penyaluran
                                   </h6>
                               </div>
@@ -52,7 +54,7 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp </sup> <?= $overview->totalpembiayaan; ?></h2>
+                                          class="set-doller">Rp </sup> <?= $pd = substr($overview->totalpembiayaan,0,3)." T"; ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pembiayaan
                                   </h6>
                               </div>
@@ -115,27 +117,13 @@
                       </div>
                   </div>
               </div>
-
+              
               <div class="reminder row">
                   <div class="col-12">
                       <div class="card">
                           <div class="card-body">
                               <div class="d-flex align-items-center mb-4">
                                   <h4 class="card-title">Reminder: Expired Pencairan</h4>
-                                  <!-- <div class="ml-auto">
-                                      <div class="dropdown sub-dropdown">
-                                          <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                              id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                              aria-expanded="false">
-                                              <i data-feather="more-vertical"></i>
-                                          </button>
-                                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                              <a class="dropdown-item" href="#">Insert</a>
-                                              <a class="dropdown-item" href="#">Update</a>
-                                              <a class="dropdown-item" href="#">Delete</a>
-                                          </div>
-                                      </div>
-                                  </div> -->
                               </div>
                               <div class="table-responsive">
                                   <table class="table no-wrap v-middle mb-0">
@@ -144,7 +132,7 @@
                                               <th class="border-0 font-14 font-weight-medium text-muted ">PENYALUR   </th>
                                               <th class="border-0 font-14 font-weight-medium text-muted text-center px-2">TOTAL PEMBIAYAAN </th>
                                               <th class="border-0 font-14 font-weight-medium text-muted text-center">TOTAL PENYALURAN</th>
-                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">DUE DATE</th>
+                                              <th class="border-0 font-14 font-weight-medium text-muted text-center">TGL EXP</th>
                                               <th class="border-0 font-14 font-weight-medium text-muted text-center">STATUS</th>
                                               <th class="border-0 font-14 font-weight-medium text-muted text-center"> Keterangan</th>
                                           </tr>
@@ -187,7 +175,6 @@
                       </div>
                   </div>
               </div>
-
             </div>
             
             <!-- footer -->
@@ -228,30 +215,6 @@
                 color: '#ddd',
                 selectedRegions: false,
                 showTooltip: true,
-                
-                series: {
-                    regions: [{values: dataPenyaluran,}]
-                },
-                onLabelShow: function(event, label, code){
-                    var data =  label[0].innerHTML.toUpperCase()
-                                + ' <b>  <br/> Total Debitur : '
-                                + dataPenyaluran[code]['DEBITUR']
-                                + ' </b> <br/> <b> Total Penyaluran : '
-                                + dataPenyaluran[code]['PENYALURAN']
-                                + '</b>'; 
-                    label.html(data);
-                },
-                onRegionClick: function(element, code, region)
-                {
-                    var message = region.toUpperCase()
-                                + ' | Total Debitur : '
-                                + dataPenyaluran[code]['DEBITUR']
-                                + ' | Total Penyaluran : '
-                                + dataPenyaluran[code]['PENYALURAN']
-                                + ' |'; 
-            
-                    alert(message);
-                }
             });
         });
     </script>

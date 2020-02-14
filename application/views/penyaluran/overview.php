@@ -26,8 +26,8 @@
                                             <th>TOTAL DEBITUR</th>
                                             <th>TOTAL PENYALURAN</th>
                                             <th>TOTAL PEMBIAYAAN</th>
-                                            <th>OSL PEMBIAYAAN</th>
                                             <th>OSL PENYALURAN</th>
+                                            <th>OSL PEMBIAYAAN</th>
                                         </tr>
                                     </thead>
                                     <tbody>

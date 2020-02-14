@@ -35,14 +35,17 @@
                 <div class="col-12 col-md-12 col-sm-12 <?= $show; ?>">
                     <div class="card">
                         <?php if ($found) : ?>
-                            <div class="empty-state" >
-                                <h2 class="section-title"> NIK DITEMUKAN!</h2>
+                            <div class="card-body" >
+                                <h2 class="section-title text-center"> <b>NIK DITEMUKAN !</b></h2>
+                                <hr class="mb-3">
                                 <!-- PRINT DATA DEBITUR -->
                                 <div class="row mb-5">
-                                    <div class="col-3 offset-3 text-left"> NIK </div>  <div class="col-6 text-left">: <b><?= $debtor['NIK']?></b> </div>
-                                    <div class="col-3 offset-3 text-left"> NAMA </div>  <div class="col-6 text-left">: <b><?= $debtor['NAMA']?></b> </div>
-                                    <div class="col-3 offset-3 text-left"> JK </div>  <div class="col-6 text-left">: <?= $debtor['JK']?> </div>
-                                    <div class="col-3 offset-3 text-left"> WILAYAH </div>  <div class="col-6 text-left">: <?= $debtor['WILAYAH']?> </div>
+                                    <div class="col-3 offset-3 text-left"> NIK </div>  <div class="col-6 text-left">: <b><?= $debtor->NIK;?></b> </div>
+                                    <div class="col-3 offset-3 text-left"> NAMA </div>  <div class="col-6 text-left">: <b><?= $debtor->NAMA;?></b> </div>
+                                    <div class="col-3 offset-3 text-left"> TGL LAHIR </div>  <div class="col-6 text-left">: <?= $debtor->TGLLAHIR?> </div>
+                                    <div class="col-3 offset-3 text-left"> JK </div>  <div class="col-6 text-left">: <?= $debtor->JK?> </div>
+                                    <div class="col-3 offset-3 text-left"> ALAMAT </div>  <div class="col-6 text-left">: <?= $debtor->ALAMAT?> </div>
+                                    <div class="col-3 offset-3 text-left"> PROV/KABKOTA </div>  <div class="col-6 text-left">: <?= $debtor->PROVINSI?> / <?= $debtor->KABKOTA?> </div>
                                 </div>
 
                                 <!-- PRINT LOOP DATA PEMBIAYAAN  -->
@@ -57,26 +60,26 @@
                                                 <th>NOAKAD</th>
                                                 <th>SEKTOR</th>
                                                 <th>TGL AKAD</th>
-                                                <th>TGL JATUHTEMPO</th>
+                                                <th>TGL JATUH TEMPO</th>
                                                 <th>NILAI AKAD</th>
                                                 <th>OUTSTANDING</th>
-                                                <th>KOLEKTABILITAS</th>
+                                                <th>SEKTOR</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $i=1; foreach ($debtor['KONTRAK'] as $a) : ?>
+                                            <?php $i=1; foreach ($debtor->PEMBIAYAAN as $a) : ?>
                                             <tr>
                                                 <td class="text-center">
                                                 <?= $i ?>
                                                 </td>
-                                                <td><?= $a['PENYALUR']; ?></td>
-                                                <td><?= $a['NOAKAD']; ?></td>
-                                                <td><?= $a['SEKTOR']; ?></td>
-                                                <td><?= $a['TGLAKAD']; ?></td>
-                                                <td><?= $a['TGLJATUHTEMPO']; ?></td>
-                                                <td class="text-right">Rp. <?=  number_format($a['NILAIAKAD'],0, '', '.'); ?></td>
-                                                <td class="text-right">Rp. <?= number_format($a['OUTSTANDING'],0, '', '.'); ?></td>
-                                                <td><?= $a['KOLEKTABILITAS']; ?></td>
+                                                <td><?= $a->PENYALUR; ?></td>
+                                                <td><?= $a->NOAKAD ?></td>
+                                                <td><?= $a->SEKTOR ?></td>
+                                                <td><?= $a->TGLAKAD ?></td>
+                                                <td><?= $a->TGLJTHTEMPO ?></td>
+                                                <td class="text-right">Rp. <?=  number_format($a->NILAIAKAD,0, '', '.'); ?></td>
+                                                <td class="text-right">Rp. <?= number_format($a->OUTSTANDING,0, '', '.'); ?></td>
+                                                <td><?= $a->SEKTOR ?></td>
                                             </tr>
                                             <?php $i++; endforeach;?>
                                         </tbody>
@@ -84,7 +87,7 @@
                                 </div>
                             </div>
                         <?php else : ?>
-                            <div class="empty-state" data-height="300">
+                            <div class="card-body" data-height="300">
                                 <h2 class="section-title"> NIK TIDAK DITEMUKAN! </h2>
                                 <p class="lead"> Maaf, data NIK yang anda input tidak ditemukan / belum mempunyai history pembiayaan Ultra Mikro  </p>
                             </div>

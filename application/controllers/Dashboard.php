@@ -17,9 +17,9 @@ class Dashboard extends CI_Controller
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
         $data['user'] = $this->db->get_where('user', ['name' => $this->session->userdata('name')])->row_array();
         $data['time'] = $this->umi->lastupdate();
-        ini_set('max_execution_time', 300);
 
         // GET DATA
+        $data['petapenyaluran'] = $this->umi->penyaluranProvinsi();
         $data['reminder'] = $this->umi->duedateAkad();
         $data['penyaluran'] = $this->umi->overview();
 
@@ -67,7 +67,6 @@ class Dashboard extends CI_Controller
         $debitur['labels'] = array_slice($bulan,count($bulan)-6);
         $data['overall_debitur'] = json_encode( $debitur, true);
         $data['master_debitur']  = array_slice($mstdbt, count($mstdbt)-6);
-        
 
         // DATA CHART PENYALURAN
         $dataset->label =  "TOTAL PENYALURAN";
@@ -78,9 +77,6 @@ class Dashboard extends CI_Controller
         $data['overall_penyaluran'] = json_encode( $penyaluran, true);
         $data['master_penyaluran']  = array_slice($mstpnyl, count($mstpnyl)-6);
         
-        
-
-
         // LOAD VIEW
         $this->load->view('templates/header', $data); // untuk memanggil template header
         $this->load->view('templates/topbar', $data);

@@ -38,8 +38,6 @@ class Pencarian extends CI_Controller
 
     public function debiturinfo($nik)
     {
-
-
         $data['title'] = 'Debitur';
         $data['subtitle'] = 'Silahkan input NIK Debitur UMi';
         $data['bc'] = $this->modul->getBreadcrumb($data['title']);
@@ -55,7 +53,6 @@ class Pencarian extends CI_Controller
         $this->load->view('templates/sidebar', $data);
         $this->load->view('pencarian/debitur', $data);
         $this->load->view('templates/footer');
-
     }
 
 }

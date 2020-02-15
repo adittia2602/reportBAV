@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/'); ?>extra-libs/datatables/datatables.min.css">
     <!-- Custom CSS -->
     <link href="<?php echo base_url('assets/'); ?>css/style.min.css" rel="stylesheet">
+    <link href="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jqvmap.css" rel="stylesheet">
 </head>
 
 <body>

@@ -2,8 +2,7 @@
             <div class="container-fluid">
               
               <div class="overview card-group">
-                    <div class="d-flex align-items-center mb-4">
-                    </div>
+                
                   <div class="card border-right">
                       <div class="card-body">
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
@@ -29,7 +28,7 @@
                                   </h6>
                               </div>
                               <div class="ml-auto mt-md-3 mt-lg-0">
-                                  <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                                  <span class="opacity-7 text-muted"><i data-feather="repeat"></i></span>
                               </div>
                           </div>
                       </div>
@@ -44,7 +43,7 @@
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Linkage</h6>
                               </div>
                               <div class="ml-auto mt-md-3 mt-lg-0">
-                                  <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                                  <span class="opacity-7 text-muted"><i data-feather="home"></i></span>
                               </div>
                           </div>
                       </div>
@@ -54,12 +53,12 @@
                           <div class="d-flex d-lg-flex d-md-block align-items-center">
                               <div>
                                   <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                          class="set-doller">Rp </sup> <?= $pd = substr($overview->totalpembiayaan,0,3)." T"; ?></h2>
+                                          class="set-doller">Rp </sup> <?= $pd = substr($overview->totalpembiayaan,0,3)." M"; ?></h2>
                                   <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Pembiayaan
                                   </h6>
                               </div>
                               <div class="ml-auto mt-md-3 mt-lg-0">
-                                  <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                                  <span class="opacity-7 text-muted"><i data-feather="pen-tool"></i></span>
                               </div>
                           </div>
                       </div>
@@ -73,7 +72,8 @@
                               <div class="d-flex align-items-center mb-4">
                                   <h4 class="card-title">Peta Penyaluran UMi - BAV</h4>
                               </div>
-                              <div id="visitorMap3"></div>
+                              <div id="vmap" style="width: 900px; height: 350px;"></div>
+                              <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.3.3.1.js"></script>
                           </div>
                       </div>
                   </div>
@@ -175,6 +175,7 @@
                       </div>
                   </div>
               </div>
+
             </div>
             
             <!-- footer -->
@@ -196,34 +197,26 @@
     <!--Custom JavaScript -->
     <script src="<?php echo base_url('assets/'); ?>js/custom.min.js"></script>
     <script src="<?php echo base_url('assets/'); ?>libs/chart.js/dist/Chart.min.js"></script>
-    <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.vmap.min.js"></script>
+    <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.vmap.js"></script>
     <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.vmap.indonesia.js"></script>
-
-    <!-- Page Specific JS File -->
-    <script type="text/javascript">
-        var dataPenyaluran = JSON.parse('<?php echo $petapenyaluran; ?>');
-
-        jQuery(document).ready(function() {
-            jQuery('#visitorMap3').vectorMap({  
-                map: 'indonesia_id',
-                backgroundColor: '#ffffff',
-                borderColor: '#f2f2f2',
-                borderOpacity: .8,
-                borderWidth: 1,
-                hoverColor  : '#000',
-                hoverOpacity: .8,
-                color: '#ddd',
-                selectedRegions: false,
-                showTooltip: true,
-            });
-        });
-    </script>
+    
     <script>
         var debtor = JSON.parse('<?php echo $overall_debitur; ?>');
         var umi_disburse = JSON.parse('<?php echo $overall_penyaluran; ?>');
 
         var opt1 = {
             legend: { display: false },
+            tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join('.');
+						return value;
+					}
+			  } // end callbacks:
+			}, //end tooltips
             scales: {
             yAxes: [{
                 gridLines: { drawBorder: false, color: '#f2f2f2' },
@@ -248,6 +241,49 @@
         type: 'bar',
         data: umi_disburse,
         options: opt1
+        });
+    </script>
+    <script> 
+        var dataPenyaluran = JSON.parse('<?php echo $petapenyaluran; ?>');
+
+        jQuery(document).ready(function () {
+            jQuery('#vmap').vectorMap({
+                map: 'indonesia_id',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#f2f2f2',
+                    borderOpacity: .8,
+                    borderWidth: 1,
+                    hoverColor  : '#000',
+                    hoverOpacity: .8,
+                    color: '#aaa',
+                    selectedRegions: false,
+                    showTooltip: true,
+                enableZoom: true,
+                selectedRegions: false,
+                showTooltip: true,
+                
+                series: { regions: [{values: dataPenyaluran,}] },
+                onLabelShow: function(event, label, code){
+                    var data =  label[0].innerHTML.toUpperCase()
+                                + ' <b>  <br/> Total Debitur : '
+                                + dataPenyaluran[code]['debitur']
+                                + ' </b> <br/> <b> Total Penyaluran : '
+                                + dataPenyaluran[code]['penyaluran']
+                                + '</b>'; 
+                    label.html(data);
+                },
+                onRegionClick: function(element, code)
+                {   
+                    var message = region.toUpperCase()
+                                + ' | Total Debitur : '
+                                + dataPenyaluran[code]['debitur']
+                                + ' | Total Penyaluran : '
+                                + dataPenyaluran[code]['penyaluran']
+                                + ''; 
+                    alert(message);
+                }
+               
+            });
         });
     </script>
     

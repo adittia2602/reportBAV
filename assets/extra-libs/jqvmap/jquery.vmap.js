@@ -344,7 +344,7 @@ JQVMap.maps = {};
   jQuery.fn.vectorMap = function (options) {
 
     var defaultParams = {
-      map: 'world_en',
+      map: 'indonesia_id',
       backgroundColor: '#a5bfdd',
       color: '#f4f3f0',
       hoverColor: '#c9dfaf',

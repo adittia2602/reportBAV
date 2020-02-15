@@ -25,6 +25,23 @@ class Umi_mods extends CI_Model
         return $this->db->query($query)->result_array();
     }
 
+    public function penyaluranProvinsi()
+    {
+        $data = new stdClass();
+        $query = "SELECT provinsi, kodewilayah, COUNT(nik) as debitur, SUM(nilaiakad) as penyaluran FROM `umi_noa` GROUP BY 1 ORDER BY 2";
+        $prov = $this->db->query($query)->result_array();
+
+        foreach ( $prov as $result){
+            $provinsi = $result['kodewilayah'];
+            $data->$provinsi = new stdClass();
+            $data->$provinsi->debitur = number_format($result['debitur'],0, '', '.');
+            $data->$provinsi->penyaluran =  'Rp. '.number_format($result['penyaluran'],0, '', '.');
+        }
+        
+        $result = json_encode($data);
+        return $result;
+    }
+
     public function penyaluranBulanan()
     {
         $query = "SELECT a.tahun, a.bulan, b.nama as penyalur, count(a.noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran

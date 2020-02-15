@@ -72,7 +72,7 @@
                               <div class="d-flex align-items-center mb-4">
                                   <h4 class="card-title">Peta Penyaluran UMi - BAV</h4>
                               </div>
-                              <div id="vmap" style="width: 900px; height: 350px;"></div>
+                              <div id="vmap" style="padding: 0px;min-height: 300px"></div>
                               <script src="<?php echo base_url('assets/'); ?>extra-libs/jqvmap/jquery.3.3.1.js"></script>
                           </div>
                       </div>
@@ -255,7 +255,7 @@
                     borderWidth: 1,
                     hoverColor  : '#000',
                     hoverOpacity: .8,
-                    color: '#59A4C9',
+                    color: '#4285C4',
                     selectedRegions: false,
                     showTooltip: true,
                 enableZoom: true,

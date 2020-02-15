@@ -255,7 +255,7 @@
                     borderWidth: 1,
                     hoverColor  : '#000',
                     hoverOpacity: .8,
-                    color: '#aaa',
+                    color: '#59A4C9',
                     selectedRegions: false,
                     showTooltip: true,
                 enableZoom: true,

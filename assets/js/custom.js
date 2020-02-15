@@ -73,6 +73,9 @@ $(function () {
         $(this).next('.custom-file-label').html(fileName);
     })
 
+    // ==============================================================
+    // for dataTables . 
+    // ==============================================================
     var now, filterButtons, exportButtons, col_filter;
     now = new Date().toISOString().split('T')[0];
     col_filter = '<?php echo $col = [0,1];?>';
@@ -123,4 +126,9 @@ $(function () {
         });
     });
 
+    // ==============================================================
+    // for jqvmap
+    // ==============================================================
+   
+   
 });

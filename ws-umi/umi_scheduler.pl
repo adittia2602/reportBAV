@@ -34,7 +34,7 @@ my $debitur = &updateDebitur($dbh);
 
 # PROCESSING UPDATE OS DEBITUR 
 configs->WriteLog('DEBITUR','PROCESSING UPDATE OS DEBITUR');
-my $osdebitur = &updateOSDebitur
+my $osdebitur = &updateOSDebitur;
 
 # PROCESSING OVERVIEW 
 configs->WriteLog('OVERVIEW','PROCESSING RESUME PENYALURAN');
@@ -185,10 +185,10 @@ sub updateTagihan
     foreach my $tagihan (@$respTagihan) {
         $sql = "INSERT INTO ".$var{'tbltagihan'}." (`id`, `id_ts`, `penyalur`, `tglakad`, `batch`, 
                 `tglpencairan`, `nilaipencairan`, `tgljthtempo`, `angsuranpokok`, 
-                `angsuranbunga`, `totalangsuran`) VALUES 
+                `angsuranbunga`, `totalangsuran`, `angsuranke`) VALUES 
                 ('".$i."','".$ts."','".$tagihan->{'PENYALUR'}."','".$tagihan->{'TGLAKAD'}."','".$tagihan->{'BATCH'}."',
                 '".$tagihan->{'TGLPENCAIRAN'}."','".$tagihan->{'NILAIPENCAIRAN'}."',
-                '".$tagihan->{'JTHTEMPO'}."','".$tagihan->{'TAGIHAN_POKOK'}."','".$tagihan->{'TAGIHAN_BUNGA'}."','".$tagihan->{'TOTAL_ANGSURAN'}."')";
+                '".$tagihan->{'JTHTEMPO'}."','".$tagihan->{'TAGIHAN_POKOK'}."','".$tagihan->{'TAGIHAN_BUNGA'}."','".$tagihan->{'TOTAL_ANGSURAN'}."','".$tagihan->{'ANGSURAN_KE'}."')";
         $sth = configs->ExecQuery($dbh, $sql);
         $sth->finish();
         $dbh->commit;
@@ -300,6 +300,24 @@ sub updateOSDebitur
     return 1;
 }
 
+sub oslPembiayaan
+{
+    my ($dbh) = @_;
+    my ($row, $sql, $sth, $penyalur, $totbayar, $oslpembiayaan);
+    my (%data);
+    $sql = "SELECT B.did, A.angsuranke, A.totalangsuran, A.nilaipencairan FROM umi_tagihan A, umi_penyalur B WHERE A.penyalur = B.nama";
+    $sth = configs->ExecQuery($dbh, $sql);
+    while ($row = $sth->fetchrow_hashref()) {
+        $penyalur       = $row->{'did'};
+        $totbayar       = $row->{'angsuranke'} * $row->{'totalangsuran'};
+        $oslpembiayaan  = $row->{'nilaipencairan'} - $totbayar;
+
+        $data{$penyalur} = !defined($data{$penyalur}) ? 0 : ($data{$penyalur}+$oslpembiayaan) ; 
+    }
+    $sth->finish();
+    return encode_json \%data;
+}
+
 sub updateOverview
 {
     my ($dbh) = @_;
@@ -315,22 +333,33 @@ sub updateOverview
     $sth->finish();
 
     configs->WriteLog('OVERVIEW','START INSERT TABLE OVERVIEW');
-    $sql = "SELECT A.kodepenyalur, sum( A.totakad ) as totpembiayaan, B.totpencairan, C.totdebitur, C.totpenyaluran, B.totpencairan as oslpencairan, C.oslpenyaluran
+    $sql = "SELECT A.kodepenyalur, sum( A.totakad ) as totpembiayaan, B.totpencairan, C.totdebitur, C.totpenyaluran, C.oslpenyaluran
             FROM ( SELECT kodepenyalur, sum(nilaiakad) as totakad FROM umi_akad WHERE batchpencairan = 1 GROUP BY kodepenyalur)  A,
-                ( SELECT kodepenyalur , sum(nilaipencairan) as totpencairan FROM umi_akad GROUP BY kodepenyalur )  B, 
-                ( SELECT kodepenyalur, count(nik) as totdebitur, sum(nilaiakad) as totpenyaluran, sum(outstanding) as oslpenyaluran FROM umi_noa GROUP BY kodepenyalur ) C
+                 ( SELECT kodepenyalur , sum(nilaipencairan) as totpencairan FROM umi_akad GROUP BY kodepenyalur )  B, 
+                 ( SELECT kodepenyalur, count(nik) as totdebitur, sum(nilaiakad) as totpenyaluran, sum(outstanding) as oslpenyaluran FROM umi_noa GROUP BY kodepenyalur ) C 
             WHERE A.kodepenyalur = B.kodepenyalur AND A.kodepenyalur = C.kodepenyalur
             GROUP BY kodepenyalur";
     $sth = configs->ExecQuery($dbh, $sql);
     while ($row = $sth->fetchrow_hashref()) {
         $sql1  = "INSERT INTO ".$var{'tbloverview'}." (id_ts, kodepenyalur, totalpembiayaan, totaldebitur, totalpencairan, totalpenyaluran, oslpembiayaan, oslpenyaluran) 
-                VALUES ('".$ts."','". $row->{'kodepenyalur'} ."','". $row->{'totpembiayaan'} ."','". $row->{'totdebitur'} ."','". $row->{'totpencairan'} ."','". $row->{'totpenyaluran'} ."','". $row->{'oslpencairan'} ."','". $row->{'oslpenyaluran'} ."')";
+                VALUES ('".$ts."','". $row->{'kodepenyalur'} ."','". $row->{'totpembiayaan'} ."','". $row->{'totdebitur'} ."','". $row->{'totpencairan'} ."','". $row->{'totpenyaluran'} ."',0,'". $row->{'oslpenyaluran'} ."')";
         $sth1 = configs->ExecQuery($dbh, $sql1);
         $sth1->finish();
         $dbh->commit;
         $i++;
     }
     $sth->finish();
+
+    configs->WriteLog('OVERVIEW','UPDATE DATA OSL PEMBIAYAAN');
+    my $oslpembiayaan = decode_json (&oslPembiayaan($dbh));
+
+    foreach my $penyalur (keys %$oslpembiayaan){
+        $sql  = " UPDATE ".$var{'tbloverview'}." SET oslpembiayaan = '".$oslpembiayaan->{$penyalur}."' 
+                   WHERE kodepenyalur = '".$penyalur."'";
+        $sth = configs->ExecQuery($dbh, $sql);
+        $sth->finish();
+        $dbh->commit;
+    }
 
     configs->WriteLog('OVERVIEW','SUCCESS UPDATE: '.($i-1).' DATA OVERVIEW');
 

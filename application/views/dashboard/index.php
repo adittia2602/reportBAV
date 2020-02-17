@@ -281,6 +281,9 @@
                                 + dataPenyaluran[code]['penyaluran']
                                 + ''; 
                     alert(message);
+                },
+                onResize: function(element, width, height) {
+                    console.log('Map Size: ' + width + 'x' + height);
                 }
                
             });

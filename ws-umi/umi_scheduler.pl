@@ -8,7 +8,7 @@ use JSON;
 use configs;
 use POSIX qw( strftime );
 use REST::Client;
-use feature qw(switch);
+use experimental qw( switch );
 use strict;
 
 
@@ -32,10 +32,6 @@ my $tagihan = &updateTagihan($dbh);
 configs->WriteLog('DEBITUR','PROCESSING LIST DEBITUR');
 my $debitur = &updateDebitur($dbh);
 
-# PROCESSING UPDATE OS DEBITUR 
-configs->WriteLog('DEBITUR','PROCESSING UPDATE OS DEBITUR');
-my $osdebitur = &updateOSDebitur;
-
 # PROCESSING OVERVIEW 
 configs->WriteLog('OVERVIEW','PROCESSING RESUME PENYALURAN');
 my $overview = &updateOverview($dbh);
@@ -52,10 +48,11 @@ sub truncateTable
 {
     my ($dbh, $table, $keterangan) = @_;
     my ($sql, $sth);
+    configs->WriteLog($keterangan,'TRUNCATE TABLE '.$keterangan);
+
     $sql = "TRUNCATE TABLE ".$table;
     $sth = configs->ExecQuery($dbh, $sql);
     $sth->finish();
-    configs->WriteLog('OVERVIEW','TRUNCATE TABLE '.$keterangan);
 
     return 1;
 }
@@ -67,14 +64,13 @@ sub fetchDataUMi
     $apiEndPoint =  $var{ 'API_umi' } . '/' . $path;
 
 	my $client = REST::Client->new();
+    configs->WriteLog('ACCESS WEBSERVICE','GET: '. $apiEndPoint);
 	$client->GET($apiEndPoint);
 	if ( $client->responseCode() ne 200) {
 		print STDOUT strftime("%Y-%m-%d %H:%M:%S", localtime) . " - RECEIVED ERROR: " . dump( $client->responseContent() ) . "\n";
 		exit;
 	}
-    configs->WriteLog('ACCESS WEBSERVICE','GET: '. $apiEndPoint);
-
-
+    
 	# process the result
 	my $jsonResp = decode_json $client->responseContent();
 
@@ -121,7 +117,7 @@ sub updateAkad
     
     my $respAkad = &fetchDataUMi($var{ 'path_akad' });
     if (ref($respAkad) eq 'ARRAY'){
-        &truncateTable($dbh, $var{'tblpembiayaan'}, 'AKAD');
+        &truncateTable($dbh, $var{'tblpembiayaan'}, 'AKAD PEMBIAYAAN');
     } else {
         configs->WriteLog('AKAD PEMBIAYAAN','GAGAL MENGAMBIL DATA AKAD');
         exit;
@@ -203,10 +199,12 @@ sub updateDebitur
 {
     my ($dbh) = @_;
     my ($row, $sql, $sth, $ts, $i);
-    my ($pendidikan,$pekerjaan, $kondisirumah);
+    my ($pendidikan,$pekerjaan, $kondisirumah, $alamat, $alamatusaha, $namadebitur);
     my $respDebitur = &fetchDataUMi($var{ 'path_noa' });
 
-    if (ref($respDebitur) ne 'ARRAY'){
+    if (ref($respDebitur) eq 'ARRAY'){
+        $i = &truncateTable($dbh, $var{'tblpenyaluran'}, 'DEBITUR');
+    } else {
         configs->WriteLog('DEBITUR','GAGAL MENGAMBIL DATA DEBITUR');
         exit;
     }
@@ -248,6 +246,10 @@ sub updateDebitur
             when(3)  {$kondisirumah = "LANTAI KAYU";}
             when(4)  {$kondisirumah = "LANTAI KERAMIK";}
         };
+        $namadebitur    = $debitur->{'NAMA'}  =~ s/\W//g;
+        $alamatusaha    = $debitur->{'ALAMATUSAHA'} =~ s/\W//g;
+        $alamat         = $debitur->{'ALAMAT'} =~ s/\W//g;
+        $debitur->{'SEKTOR'}  =~ s/\W//g;
 
         $sql  = "INSERT IGNORE INTO ".$var{'tblpenyaluran'}." ( `id_ts`, `id`, `kodepenyalur`, `provinsi`, `kabkota`, `ts`, `tahun`, `bulan`, 
                     `nik`, `nama`, `birthdate`, `pendidikan`, `pekerjaan`, `alamat`, `kodewilayah`, 
@@ -256,46 +258,22 @@ sub updateDebitur
                     `tanggalakad`, `tanggaljatuhtempo`, `nopenjaminan`, `nilaidijamin`, `sukubunga`, `nilaiakad`, 
                     `tglupload`, `tgldropping`, `sektor`, `skemakredit`, `outstanding`) VALUES 
                     ('".$ts."','".$debitur->{'ID'}."','".$debitur->{'KODEPENYALUR'}."','".$debitur->{'PROVINSI'}."','".$debitur->{'KABKOTA'}."',
-                    '".$debitur->{'TS'}."','".$debitur->{'TAHUN'}."','".$debitur->{'BULAN'}."','".$debitur->{'NIK'}."','".$debitur->{'NAMA'}."',
-                    '".$debitur->{'BIRTHDATE'}."','".$pendidikan."','".$pekerjaan."','".$debitur->{'ALAMAT'}."',
+                    '".$debitur->{'TS'}."','".$debitur->{'TAHUN'}."','".$debitur->{'BULAN'}."','".$debitur->{'NIK'}."','".$namadebitur."',
+                    '".$debitur->{'BIRTHDATE'}."','".$pendidikan."','".$pekerjaan."','".$alamat."',
                     '".$debitur->{'KODEWILAYAH'}."','".$debitur->{'KODEPOS'}."','".$debitur->{'NPWP'}."','".$debitur->{'MULAIUSAHA'}."',
-                    '".$debitur->{'ALAMATUSAHA'}."','".$debitur->{'NOIZIN'}."','".$debitur->{'MODAL'}."','".$debitur->{'JUMLAHPEKERJA'}."',
+                    '".$alamatusaha."','".$debitur->{'NOIZIN'}."','".$debitur->{'MODAL'}."','".$debitur->{'JUMLAHPEKERJA'}."',
                     '".$debitur->{'OMSET'}."','".$debitur->{'NOMORHP'}."','".$kondisirumah."','".$debitur->{'URAIANAGUNAN'}."',
                     '".$debitur->{'JK'}."','".$debitur->{'MARRIAGE'}."','".$debitur->{'NOAKAD'}."','".$debitur->{'NOREKENING'}."',
                     '".$debitur->{'TANGGALAKAD'}."','".$debitur->{'TANGGALJATUHTEMPO'}."','".$debitur->{'NOPENJAMINAN'}."','".$debitur->{'NILAIDIJAMIN'}."',
                     '".$debitur->{'SUKUBUNGA'}."','".$debitur->{'NILAIAKAD'}."','".$debitur->{'TGLUPLOAD'}."','".$debitur->{'TGLDROPPING'}."',
-                    '".$debitur->{'SEKTOR'}."','".$debitur->{'SKEMAKREDIT'}."','0')";
+                    '".$debitur->{'SEKTOR'}."','".$debitur->{'SKEMAKREDIT'}."','".$debitur->{'OUTSTANDING'}."')";
         $sth = configs->ExecQuery($dbh, $sql);
         $sth->finish();
         $dbh->commit;
+        configs->WriteLog('SUCCESS INSERT: '.$debitur->{'ID'},'','');
         $i++;
     }
     configs->WriteLog('DEBITUR','SUCCESS UPDATE: '.($i-1).' DATA DEBITUR SAH');
-
-    return 1;
-}
-
-sub updateOSDebitur
-{
-    my ($dbh) = @_;
-    my ($row, $sql, $sth, $ts, $i);
-    
-    my $resposDebitur = &fetchDataUMi($var{ 'path_osdebtor' });
-    if (ref($resposDebitur) ne 'ARRAY'){
-        configs->WriteLog('DEBITUR','GAGAL MENGAMBIL DATA OS DEBITUR');
-        exit;
-    }
-    $i = 1;
-
-    configs->WriteLog('DEBITUR','START UPDATE TABLE DEBITUR: OS DEBITUR');
-    foreach my $debitur (@$resposDebitur) {
-        $sql  = "UPDATE umi_noa SET outstanding = ".$debitur->{'OUTSTANDING'}." WHERE noakad = ".$debitur->{'NOAKAD'};
-        $sth = configs->ExecQuery($dbh, $sql);
-        $sth->finish();
-        $dbh->commit;
-        $i++;
-    }
-    configs->WriteLog('DEBITUR','SUCCESS UPDATE: '.($i-1).' DATA OS DEBITUR');
 
     return 1;
 }
@@ -333,11 +311,12 @@ sub updateOverview
     $sth->finish();
 
     configs->WriteLog('OVERVIEW','START INSERT TABLE OVERVIEW');
-    $sql = "SELECT A.kodepenyalur, sum( A.totakad ) as totpembiayaan, B.totpencairan, C.totdebitur, C.totpenyaluran, C.oslpenyaluran
+    $sql = "SELECT A.kodepenyalur, sum( A.totakad ) as totpembiayaan, B.totpencairan, C.totdebitur, C.totpenyaluran, D.oslpenyaluran
             FROM ( SELECT kodepenyalur, sum(nilaiakad) as totakad FROM umi_akad WHERE batchpencairan = 1 GROUP BY kodepenyalur)  A,
                  ( SELECT kodepenyalur , sum(nilaipencairan) as totpencairan FROM umi_akad GROUP BY kodepenyalur )  B, 
-                 ( SELECT kodepenyalur, count(nik) as totdebitur, sum(nilaiakad) as totpenyaluran, sum(outstanding) as oslpenyaluran FROM umi_noa GROUP BY kodepenyalur ) C 
-            WHERE A.kodepenyalur = B.kodepenyalur AND A.kodepenyalur = C.kodepenyalur
+                 ( SELECT kodepenyalur, count(nik) as totdebitur, sum(nilaiakad) as totpenyaluran FROM umi_noa GROUP BY kodepenyalur ) C,
+                 ( SELECT kodepenyalur, sum(outstanding) as oslpenyaluran FROM umi_noa WHERE tanggaljatuhtempo >= 'NOW()' GROUP BY kodepenyalur ) D
+            WHERE A.kodepenyalur = B.kodepenyalur AND A.kodepenyalur = C.kodepenyalur AND C.kodepenyalur = A.kodepenyalur
             GROUP BY kodepenyalur";
     $sth = configs->ExecQuery($dbh, $sql);
     while ($row = $sth->fetchrow_hashref()) {

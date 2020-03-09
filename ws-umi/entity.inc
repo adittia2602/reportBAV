@@ -15,7 +15,7 @@ tblpenyalur     = umi_penyalur
 tbloverview     = umi_overview 
 
 ############################# LOG #############################
-logDir = ./log/umi-scheduler-log.txt
+logDir = ./log/UMiScheduler-log.txt
 
 ########################### OTHERS ###########################
 API_umi         = http://localhost:5000/bav

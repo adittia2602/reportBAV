@@ -17,6 +17,20 @@ class Umi_mods extends CI_Model
 
         return $this->db->query($query)->result_array();
     }
+
+    public function dashboard()
+    {
+        $data = new stdClass();
+        $query = "SELECT count(`kodepenyalur`) as totalpenyalur, sum(`totaldebitur`) as debitur, sum(`totalpenyaluran`) as penyaluran, sum(`totalpencairan`) as pembiayaan FROM `umi_overview` WHERE 1";
+        $overview = $this->db->query($query)->row_array();
+        
+        $data->totaldebitur = number_format($overview['debitur'],0, '', '.');
+        $data->totalpenyaluran = number_format($overview['penyaluran'],0, '', '.');
+        $data->totalpenyalur = number_format($overview['totalpenyalur'],0, '', '.');
+        $data->totalpembiayaan = number_format($overview['pembiayaan'],0, '', '.');
+        
+        return $data;
+    }
     
     public function overview()
     {
@@ -111,7 +125,7 @@ class Umi_mods extends CI_Model
 
     public function summaryPenyaluran()
     {
-        $query = "SELECT count(noakad) as totaldebitur, sum(nilaiakad) as totalpenyaluran FROM umi_noa";
+        $query = "SELECT count(*) as totaldebitur, sum(nilaiakad) as totalpenyaluran FROM umi_noa";
 
         return $this->db->query($query)->row_array();
     }
@@ -143,39 +157,20 @@ class Umi_mods extends CI_Model
     {
         $penyaluran = new StdClass();
 
-        $query = "  SELECT 
-                        kodepenyalur,
-                        penyalur, 
-                        sum(nilaipencairan) AS totalpencairan 
-                    FROM umi_akad
-                    GROUP BY 1 
-                    ORDER BY kodepenyalur ";
+        $query = "  SELECT B.nama, A.* FROM umi_overview A, umi_penyalur B WHERE A.kodepenyalur = B.did ";
         $contract = $this->db->query($query)->result_array();
-        foreach ( $contract as $tp ){  
-            $pembiayaan[] = (object) array(
-                'kodepenyalur'      => $tp['kodepenyalur'],
-                'penyalur'          => $tp['penyalur'],
-                'totalpencairan'      => $tp['totalpencairan'] 
-            );
+        foreach ( $contract as $py ){  
+            $data[] = (object) array(
+                'penyalur' =>$py['nama'],
+                'totaldebitur' => number_format($py['totaldebitur'],0, '', '.'),
+                'totalpenyaluran'  => number_format($py['totalpenyaluran'],0, '', '.'),
+                'totalpembiayaan' => number_format($py['totalpencairan'],0, '', '.'), 
+                'ospenyaluran' => number_format($py['oslpenyaluran'],0, '', '.'),
+                'ospembiayaan' => number_format($py['oslpembiayaan'],0, '', '.')
+            );      
         }
 
-        $query = " SELECT kodepenyalur, count(nik) AS totaldebitur, SUM(nilaiakad) AS totalpenyaluran, SUM(outstanding) AS ospenyaluran FROM umi_noa GROUP BY 1 ";
-        $penyaluran = $this->db->query($query)->result_array();
-        
-        foreach ($pembiayaan as $pb) {
-            foreach ($penyaluran as $py) {
-                if ( $py['kodepenyalur'] == $pb->kodepenyalur ){
-                    $data[] = (object) array(
-                        'penyalur' =>$pb->penyalur,
-                        'totaldebitur' => number_format($py['totaldebitur'],0, '', '.'),
-                        'totalpenyaluran'  => number_format($py['totalpenyaluran'],0, '', '.'),
-                        'totalpembiayaan' => number_format($pb->totalpencairan,0, '', '.'), 
-                        'ospenyaluran' => number_format($py['ospenyaluran'],0, '', '.'),
-                        'ospembiayaan' => number_format($pb->totalpencairan,0, '', '.')
-                    );
-                }
-            }
-        }
+      
      
         return $data;
     }

@@ -144,10 +144,10 @@ sub updateAkad
 
         $sql  = "INSERT INTO ".$var{'tblpembiayaan'}."
                 (`id`, `kodepenyalur`, `penyalur`, `tglakad`, `nilaiakad`, `target`, 
-                `batchpencairan`, `tglpencairan`, `nilaipencairan`, `id_ts`) VALUES ";
+                `batchpencairan`, `tglpencairan`, `nilaipencairan`, `angsuranke`,`totalpengembalian`, `id_ts`) VALUES ";
         $sql .= "('".$i."','".$akad->{'KODEPENYALUR'}."','".$akad->{'PENYALUR'}."',
                     '".$contractdate."','".$akad->{'NILAIAKAD'}."','".$duedate."',
-                    '".$akad->{'BATCH'}."','".$akad->{'TGLPENCAIRAN'}."','".$akad->{'NILAIPENCAIRAN'}."', '".$ts."')";
+                    '".$akad->{'BATCH'}."','".$akad->{'TGLPENCAIRAN'}."','".$akad->{'NILAIPENCAIRAN'}."', '".$akad->{'ANGSURANKE'}."','".$akad->{'NILAIPENGEMBALIAN'}."','".$ts."')";
         $sth = configs->ExecQuery($dbh, $sql);
         $sth->finish();
         $dbh->commit;
@@ -249,15 +249,19 @@ sub updateDebitur
         $namadebitur    = $debitur->{'NAMA'}  =~ s/\W//g;
         $alamatusaha    = $debitur->{'ALAMATUSAHA'} =~ s/\W//g;
         $alamat         = $debitur->{'ALAMAT'} =~ s/\W//g;
-        $debitur->{'SEKTOR'}  =~ s/\W//g;
+        # $debitur->{'SEKTOR'}  =~ s/'/''/gr;
+        $debitur->{'SEKTOR'}  =~ s/'//g;
+        $debitur->{'NOMORHP'}  =~ s/\W//g;
+        
+        configs->WriteLog('INSERT: '.$debitur->{'ID'},'','');
 
-        $sql  = "INSERT IGNORE INTO ".$var{'tblpenyaluran'}." ( `id_ts`, `id`, `kodepenyalur`, `provinsi`, `kabkota`, `ts`, `tahun`, `bulan`, 
+        $sql  = "INSERT INTO ".$var{'tblpenyaluran'}." ( `id_ts`, `id`, `kodepenyalur`, `provinsi`, `kabkota`, `ts`, `tahun`, `bulan`, 
                     `nik`, `nama`, `birthdate`, `pendidikan`, `pekerjaan`, `alamat`, `kodewilayah`, 
                     `kodepos`, `npwp`, `mulaiusaha`, `alamatusaha`, `noizin`, `modal`, `jumlahpekerja`, 
                     `omset`, `nomorhp`, `kondisirumah`, `uraianagunan`, `jk`, `marriage`, `noakad`, `norekening`, 
                     `tanggalakad`, `tanggaljatuhtempo`, `nopenjaminan`, `nilaidijamin`, `sukubunga`, `nilaiakad`, 
                     `tglupload`, `tgldropping`, `sektor`, `skemakredit`, `outstanding`) VALUES 
-                    ('".$ts."','".$debitur->{'ID'}."','".$debitur->{'KODEPENYALUR'}."','".$debitur->{'PROVINSI'}."','".$debitur->{'KABKOTA'}."',
+                    ('".$ts."','".$i."','".$debitur->{'KODEPENYALUR'}."','".$debitur->{'PROVINSI'}."','".$debitur->{'KABKOTA'}."',
                     '".$debitur->{'TS'}."','".$debitur->{'TAHUN'}."','".$debitur->{'BULAN'}."','".$debitur->{'NIK'}."','".$namadebitur."',
                     '".$debitur->{'BIRTHDATE'}."','".$pendidikan."','".$pekerjaan."','".$alamat."',
                     '".$debitur->{'KODEWILAYAH'}."','".$debitur->{'KODEPOS'}."','".$debitur->{'NPWP'}."','".$debitur->{'MULAIUSAHA'}."',
@@ -270,7 +274,7 @@ sub updateDebitur
         $sth = configs->ExecQuery($dbh, $sql);
         $sth->finish();
         $dbh->commit;
-        configs->WriteLog('SUCCESS INSERT: '.$debitur->{'ID'},'','');
+        configs->WriteLog($i,'SUCCESS INSERT: '.$debitur->{'ID'},'');
         $i++;
     }
     configs->WriteLog('DEBITUR','SUCCESS UPDATE: '.($i-1).' DATA DEBITUR SAH');
@@ -281,16 +285,13 @@ sub updateDebitur
 sub oslPembiayaan
 {
     my ($dbh) = @_;
-    my ($row, $sql, $sth, $penyalur, $totbayar, $oslpembiayaan);
+    my ($row, $sql, $sth, $penyalur, $totpencairan,$oslpembiayaan);
     my (%data);
-    $sql = "SELECT B.did, A.angsuranke, A.totalangsuran, A.nilaipencairan FROM umi_tagihan A, umi_penyalur B WHERE A.penyalur = B.nama";
+    $sql = "SELECT kodepenyalur, sum(nilaipencairan) as pencairan, sum(totalpengembalian) as pengembalian FROM umi_akad GROUP BY 1";
     $sth = configs->ExecQuery($dbh, $sql);
     while ($row = $sth->fetchrow_hashref()) {
-        $penyalur       = $row->{'did'};
-        $totbayar       = $row->{'angsuranke'} * $row->{'totalangsuran'};
-        $oslpembiayaan  = $row->{'nilaipencairan'} - $totbayar;
-
-        $data{$penyalur} = !defined($data{$penyalur}) ? 0 : ($data{$penyalur}+$oslpembiayaan) ; 
+        $data{ $row->{'kodepenyalur'} }   = $row->{'pencairan'} - $row->{'pengembalian'};
+        
     }
     $sth->finish();
     return encode_json \%data;
@@ -316,7 +317,7 @@ sub updateOverview
                  ( SELECT kodepenyalur , sum(nilaipencairan) as totpencairan FROM umi_akad GROUP BY kodepenyalur )  B, 
                  ( SELECT kodepenyalur, count(nik) as totdebitur, sum(nilaiakad) as totpenyaluran FROM umi_noa GROUP BY kodepenyalur ) C,
                  ( SELECT kodepenyalur, sum(outstanding) as oslpenyaluran FROM umi_noa WHERE tanggaljatuhtempo >= 'NOW()' GROUP BY kodepenyalur ) D
-            WHERE A.kodepenyalur = B.kodepenyalur AND A.kodepenyalur = C.kodepenyalur AND C.kodepenyalur = A.kodepenyalur
+            WHERE A.kodepenyalur = B.kodepenyalur AND A.kodepenyalur = C.kodepenyalur AND C.kodepenyalur = D.kodepenyalur
             GROUP BY kodepenyalur";
     $sth = configs->ExecQuery($dbh, $sql);
     while ($row = $sth->fetchrow_hashref()) {

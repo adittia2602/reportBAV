@@ -21,21 +21,7 @@ class Dashboard extends CI_Controller
         // GET DATA
         $data['petapenyaluran'] = $this->umi->penyaluranProvinsi();
         $data['reminder'] = $this->umi->duedateAkad();
-        $data['penyaluran'] = $this->umi->overview();
-
-        $totpenyalur = $totdebitur = $totpenyaluran = $totpembiayaan = 0;
-        $data['overview'] = new stdClass();
-        foreach ($data['penyaluran'] as $r){
-            $totpenyalur += 1;
-            $totdebitur += $r['totaldebitur'];
-            $totpenyaluran += $r['totalpenyaluran'];
-            $totpembiayaan += $r['totalpembiayaan'];
-        }
-        $data['overview']->totaldebitur = number_format($totdebitur,0, '', '.');
-        $data['overview']->totalpenyaluran = number_format($totpenyaluran,0, '', '.');
-        $data['overview']->totalpenyalur = number_format($totpenyalur,0, '', '.');
-        $data['overview']->totalpembiayaan = number_format($totpembiayaan,0, '', '.');
-        
+        $data['overview'] = $this->umi->dashboard();        
         $bulanan = $this->umi->penyaluranBulanan();
 
 

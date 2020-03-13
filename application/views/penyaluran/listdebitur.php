@@ -25,7 +25,7 @@
                                     </select>
                                 </div>
                                 <div class="row justify-content-end">
-                                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                    <button type="submit" class="btn btn-primary btn-lg">Download</button>
                                 </div>
                             </form>
                         </div>

@@ -199,7 +199,7 @@ sub updateDebitur
 {
     my ($dbh) = @_;
     my ($row, $sql, $sth, $ts, $i);
-    my ($pendidikan,$pekerjaan, $kondisirumah, $alamat, $alamatusaha, $namadebitur);
+    my ($pendidikan,$pekerjaan, $kondisirumah);
     my $respDebitur = &fetchDataUMi($var{ 'path_noa' });
 
     if (ref($respDebitur) eq 'ARRAY'){
@@ -246,10 +246,9 @@ sub updateDebitur
             when(3)  {$kondisirumah = "LANTAI KAYU";}
             when(4)  {$kondisirumah = "LANTAI KERAMIK";}
         };
-        $namadebitur    = $debitur->{'NAMA'}  =~ s/\W//g;
-        $alamatusaha    = $debitur->{'ALAMATUSAHA'} =~ s/\W//g;
-        $alamat         = $debitur->{'ALAMAT'} =~ s/\W//g;
-        # $debitur->{'SEKTOR'}  =~ s/'/''/gr;
+        $debitur->{'NAMA'} =~ s/\W/ /g ;
+        $debitur->{'ALAMATUSAHA'} =~ s/\W/ /g ;
+        $debitur->{'ALAMAT'} =~ s/\W/ /g ;
         $debitur->{'SEKTOR'}  =~ s/'//g;
         $debitur->{'NOMORHP'}  =~ s/\W//g;
         
@@ -262,10 +261,10 @@ sub updateDebitur
                     `tanggalakad`, `tanggaljatuhtempo`, `nopenjaminan`, `nilaidijamin`, `sukubunga`, `nilaiakad`, 
                     `tglupload`, `tgldropping`, `sektor`, `skemakredit`, `outstanding`) VALUES 
                     ('".$ts."','".$i."','".$debitur->{'KODEPENYALUR'}."','".$debitur->{'PROVINSI'}."','".$debitur->{'KABKOTA'}."',
-                    '".$debitur->{'TS'}."','".$debitur->{'TAHUN'}."','".$debitur->{'BULAN'}."','".$debitur->{'NIK'}."','".$namadebitur."',
-                    '".$debitur->{'BIRTHDATE'}."','".$pendidikan."','".$pekerjaan."','".$alamat."',
+                    '".$debitur->{'TS'}."','".$debitur->{'TAHUN'}."','".$debitur->{'BULAN'}."','".$debitur->{'NIK'}."','".$debitur->{'NAMA'}."',
+                    '".$debitur->{'BIRTHDATE'}."','".$pendidikan."','".$pekerjaan."','".$debitur->{'ALAMAT'}."',
                     '".$debitur->{'KODEWILAYAH'}."','".$debitur->{'KODEPOS'}."','".$debitur->{'NPWP'}."','".$debitur->{'MULAIUSAHA'}."',
-                    '".$alamatusaha."','".$debitur->{'NOIZIN'}."','".$debitur->{'MODAL'}."','".$debitur->{'JUMLAHPEKERJA'}."',
+                    '".$debitur->{'ALAMATUSAHA'}."','".$debitur->{'NOIZIN'}."','".$debitur->{'MODAL'}."','".$debitur->{'JUMLAHPEKERJA'}."',
                     '".$debitur->{'OMSET'}."','".$debitur->{'NOMORHP'}."','".$kondisirumah."','".$debitur->{'URAIANAGUNAN'}."',
                     '".$debitur->{'JK'}."','".$debitur->{'MARRIAGE'}."','".$debitur->{'NOAKAD'}."','".$debitur->{'NOREKENING'}."',
                     '".$debitur->{'TANGGALAKAD'}."','".$debitur->{'TANGGALJATUHTEMPO'}."','".$debitur->{'NOPENJAMINAN'}."','".$debitur->{'NILAIDIJAMIN'}."',

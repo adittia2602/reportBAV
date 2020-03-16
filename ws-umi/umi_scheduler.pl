@@ -250,6 +250,7 @@ sub updateDebitur
         $debitur->{'ALAMATUSAHA'} =~ s/\W/ /g ;
         $debitur->{'ALAMAT'} =~ s/\W/ /g ;
         $debitur->{'SEKTOR'}  =~ s/'//g;
+        $debitur->{'URAIANAGUNAN'}  =~ s/'//g;
         $debitur->{'NOMORHP'}  =~ s/\W//g;
         
         configs->WriteLog('INSERT: '.$debitur->{'ID'},'','');

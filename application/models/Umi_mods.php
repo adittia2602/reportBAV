@@ -42,7 +42,9 @@ class Umi_mods extends CI_Model
     public function penyaluranProvinsi()
     {
         $data = new stdClass();
-        $query = "SELECT provinsi, kodewilayah, COUNT(nik) as debitur, SUM(nilaiakad) as penyaluran FROM `umi_noa` GROUP BY 1 ORDER BY 2";
+        $query = " SELECT A.provinsi, B.kodewilayah, COUNT(A.nik) as debitur, SUM(A.nilaiakad) as penyaluran FROM umi_noa A, ref_wilayah B 
+                   WHERE A.provinsi = B.namawilayah
+                   GROUP BY 1 ORDER BY 2";
         $prov = $this->db->query($query)->result_array();
 
         foreach ( $prov as $result){
@@ -136,7 +138,7 @@ class Umi_mods extends CI_Model
                          mulaiusaha, alamatusaha, noizin, modal, jumlahpekerja, omset,
                          nomorhp, kondisirumah, uraianagunan, jk, marriage, marriage,
                          noakad, norekening, tanggalakad, tanggaljatuhtempo,  
-                         sukubunga, nilaiakad, tglupload, tgldropping, sektor
+                         sukubunga, nilaiakad, tglupload, tgldropping, sektor,outstanding
                   FROM umi_noa where kodepenyalur = $idpenyalur";
         // print_r($query);
         // print_r($this->db->query($query)->result_array());

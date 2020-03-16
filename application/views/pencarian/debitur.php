@@ -63,7 +63,6 @@
                                                 <th>TGL JATUH TEMPO</th>
                                                 <th>NILAI AKAD</th>
                                                 <th>OUTSTANDING</th>
-                                                <th>SEKTOR</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -79,7 +78,6 @@
                                                 <td><?= $a->TGLJTHTEMPO ?></td>
                                                 <td class="text-right">Rp. <?=  number_format($a->NILAIAKAD,0, '', '.'); ?></td>
                                                 <td class="text-right">Rp. <?= number_format($a->OUTSTANDING,0, '', '.'); ?></td>
-                                                <td><?= $a->SEKTOR ?></td>
                                             </tr>
                                             <?php $i++; endforeach;?>
                                         </tbody>

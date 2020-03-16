@@ -120,6 +120,7 @@ class Penyaluran extends CI_Controller
         $object->getActiveSheet()->setCellValue('AB1' ,'TGLUPLOAD');
         $object->getActiveSheet()->setCellValue('AC1' ,'TGLDROPPING');
         $object->getActiveSheet()->setCellValue('AD1' ,'SEKTOR');
+	$object->getActiveSheet()->setCellValue('AE1' ,'OUTSTANDING');
 
 
         $baris = 2;
@@ -156,7 +157,7 @@ class Penyaluran extends CI_Controller
             $object->getActiveSheet()->setCellValue('AB' . $baris, $item['tglupload']);
             $object->getActiveSheet()->setCellValue('AC' . $baris, $item['tgldropping']);
             $object->getActiveSheet()->setCellValue('AD' . $baris, $item['sektor']);
-
+	    $object->getActiveSheet()->setCellValue('AE' . $baris, $item['outstanding']);
             $baris++; $no++;
         }
         $filename = $title . '.xlsx';
@@ -170,7 +171,9 @@ class Penyaluran extends CI_Controller
         $writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         
         $writer->save('php://output');
-        exit;
+       ini_set('max_execution_time', 1000); 
+       ini_set('memory_limit', '1G');
+       exit;
     }
 
 }
